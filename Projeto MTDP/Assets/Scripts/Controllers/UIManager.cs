@@ -6,7 +6,9 @@ public class UIManager : MonoBehaviour
     public GameObject settings;
     [SerializeField] private bool settingsState;
     public GameObject pauseMenu;
+    public GameObject gameOver;
     [SerializeField] private bool pauseState;
+    private Scene currentScene;
 
     public bool PauseState { get => pauseState; set => pauseState = value; }
 
@@ -44,10 +46,16 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+    
+    public void ReloadScene()
+    {
+        currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
+    }
 
     public void TurnSettings()
     {
-        settingsState = !settingsState; 
+        settingsState = !settingsState;
         settings.SetActive(settingsState);
     }
 

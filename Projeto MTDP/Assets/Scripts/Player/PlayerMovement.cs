@@ -4,8 +4,8 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rig;
     private Animator anim;
-
     private UIManager uiM;
+    private PlayerCombat playerCombat;
     
     [SerializeField] private int initialSpeed;
     [SerializeField] private int speed;
@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
+        playerCombat = GetComponent<PlayerCombat>();
         IsMoving = false;
         isGrounded = false;
         isJumping = false;
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        if (!uiM.PauseState)
+        if (!uiM.PauseState && !playerCombat.IsDead)
         { 
             direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
             IsMoving = direction.x != 0;
@@ -70,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) && isGrounded)
         {
-            Speed = 15;
+            Speed = (int)(InitialSpeed * 1.7f);
         }
         else
         {
