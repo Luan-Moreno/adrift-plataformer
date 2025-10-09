@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -6,18 +7,28 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     private UIManager uiM;
     private PlayerCombat playerCombat;
+    private TrailRenderer trailRenderer;
     
-    [SerializeField] private int initialSpeed;
-    [SerializeField] private int speed;
-    [SerializeField] private int jumpForce;
+    [Header("Movimentation Variables")]
+    [SerializeField] private float initialSpeed;
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float dashVelocity;
+    [SerializeField] private float dashDuration;
     private Vector2 direction;
+    private Vector2 dashDirection;
+
+    [Header("Checks")]
     [SerializeField] private bool isMoving;
     [SerializeField] private bool isGrounded;
-    private bool isJumping;
+    [SerializeField] private bool isJumping;
+    [SerializeField] private bool isDashing;
+    [SerializeField] private bool canDash;
+    private float facing;
 
     public bool IsMoving { get => isMoving; set => isMoving = value; }
-    public int Speed { get => speed; set => speed = value; }
-    public int InitialSpeed { get => initialSpeed; set => initialSpeed = value; }
+    public float Speed { get => speed; set => speed = value; }
+    public float InitialSpeed { get => initialSpeed; set => initialSpeed = value; }
 
     void Start()
     {
@@ -25,20 +36,24 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         playerCombat = GetComponent<PlayerCombat>();
+        trailRenderer = GetComponent<TrailRenderer>();
         IsMoving = false;
         isGrounded = false;
         isJumping = false;
+        isDashing = false;
+        canDash = false;
         Speed = InitialSpeed;
     }
     void Update()
     {
         if (!uiM.PauseState && !playerCombat.IsDead)
-        { 
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+        {
+            direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             IsMoving = direction.x != 0;
             Rotate();
             Run();
             Jump();
+            Dash();
         }
     }
 
@@ -46,7 +61,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!uiM.PauseState)
         {
-            rig.linearVelocity = new Vector2(direction.x * Speed, rig.linearVelocity.y);
+            if (!isDashing)
+            {
+              rig.linearVelocity = new Vector2(direction.x * Speed, rig.linearVelocity.y);
+            }
             if (isJumping)
             {
                 rig.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
@@ -71,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) && isGrounded)
         {
-            Speed = (int)(InitialSpeed * 1.7f);
+            Speed = InitialSpeed * 1.75f;
         }
         else
         {
@@ -85,6 +103,41 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = true;
         }
+    }
+
+    void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.Q) && canDash)
+        {
+            isDashing = true;
+            canDash = false;
+            trailRenderer.emitting = true;
+
+            dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), (Input.GetAxisRaw("Vertical") / 3));
+            if (dashDirection == Vector2.zero)
+            {
+                facing = transform.eulerAngles.y == 0f ? 1f : -1f;
+                dashDirection = new Vector2(facing, 0);
+            }
+            StartCoroutine(StopDashing());
+        }
+
+        if (isDashing)
+        {
+            rig.linearVelocity = dashDirection.normalized * dashVelocity;
+        }
+
+        if (isGrounded && !isDashing)
+        {
+            canDash = true;
+        }
+    }
+
+    IEnumerator StopDashing()
+    {
+        yield return new WaitForSeconds(dashDuration);
+        trailRenderer.emitting = false;
+        isDashing = false;
     }
 
     #region Collision

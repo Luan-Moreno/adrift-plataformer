@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class PlayerAnim : MonoBehaviour
 {
-    public PlayerMovement playerMovement;
-    public Animator anim;
+    private PlayerMovement playerMovement;
+    private PlayerCombat playerCombat;
+    private Animator anim;
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        anim = playerMovement.GetComponent<Animator>();
+        playerCombat = GetComponent<PlayerCombat>();    
+        anim = GetComponent<Animator>();
     }
 
     void Update()
