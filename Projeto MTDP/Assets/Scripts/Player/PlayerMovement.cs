@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        if (!uiM.PauseState && !playerCombat.IsDead)
+        if (!uiM.PauseState && !playerCombat.IsDead && speed != 0)
         {
             direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             IsMoving = direction.x != 0;

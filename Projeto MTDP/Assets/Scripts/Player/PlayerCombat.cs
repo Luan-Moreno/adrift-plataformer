@@ -3,11 +3,13 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     [Header("Life/HP")]
-    [SerializeField] private int playerHp;
-    [SerializeField] private bool isColliding;
+    [SerializeField] private int currentHp;
+    [SerializeField] private int maxHp;
+    private bool isColliding;
     [SerializeField] private bool isImmortal;
     [SerializeField] private bool isDead;
-    [SerializeField] private bool isCharging;
+    private bool isCharging;
+    [SerializeField] private bool nearBonfire;
 
     [Header("Damage/Attack")]
     [SerializeField] private bool isStrongAttack;
@@ -15,62 +17,68 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float radius;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float strongAttackHoldTime;
+    private int playerDamage;
     private float damageCooldown = 1f;
     private float lastDamageTime;
     private float chargeStartTime;
-    [SerializeField] private float strongAttackHoldTime;
     private float lastAttackTime;
-    private int playerDamage;
+    private GameObject bonfire;
     
     private Animator anim;
     private UIManager uiM;
+    private SequenceManager sequenceManager;
+    private Collider2D hit;
 
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsCharging { get => isCharging; set => isCharging = value; }
     public bool IsStrongAttack { get => isStrongAttack; set => isStrongAttack = value; }
+    public int MaxHp { get => maxHp; set => maxHp = value; }
+    public int CurrentHp { get => currentHp; set => currentHp = value; }
+    public GameObject Bonfire { get => bonfire; set => bonfire = value; }
 
     void Start()
     {
-        playerHp = 5;
+        currentHp = MaxHp;
         playerDamage = 1;
         anim = GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
+        sequenceManager = FindAnyObjectByType<SequenceManager>();
+        Bonfire = gameObject;
         isColliding = false;
         IsDead = false;
     }
     void Update()
     {
         if (!uiM.PauseState && !isDead)
-        { 
-        if (Input.GetMouseButtonDown(0) && Time.time > lastAttackTime + attackCooldown)
         {
-            IsCharging = true;
-            chargeStartTime = Time.time;
-            anim.SetBool("isCharging", true);
-        }
-
-        if (Input.GetMouseButtonUp(0) && IsCharging)
-        {
-            IsCharging = false;
-            float heldTime = Time.time - chargeStartTime;
-
-            if (heldTime < strongAttackHoldTime)
+            if (Input.GetMouseButtonDown(0) && Time.time > lastAttackTime + attackCooldown)
             {
-                IsStrongAttack = false;
-                anim.SetBool("isCharging", false);
-                anim.SetTrigger("isAttacking");
-                Debug.Log("Ataque Normal!");
-            }
-            else
-            {
-                IsStrongAttack = true;
-                anim.SetBool("isCharging", false);
-                anim.SetTrigger("isStrongAttacking");
-                Debug.Log("Ataque Forte!");
+                IsCharging = true;
+                chargeStartTime = Time.time;
+                anim.SetBool("isCharging", true);
             }
 
-            lastAttackTime = Time.time;
-        }
+            if (Input.GetMouseButtonUp(0) && IsCharging)
+            {
+                IsCharging = false;
+                float heldTime = Time.time - chargeStartTime;
+
+                if (heldTime < strongAttackHoldTime)
+                {
+                    IsStrongAttack = false;
+                    anim.SetBool("isCharging", false);
+                    anim.SetTrigger("isAttacking");
+                }
+                else
+                {
+                    IsStrongAttack = true;
+                    anim.SetBool("isCharging", false);
+                    anim.SetTrigger("isStrongAttacking");
+                }
+
+                lastAttackTime = Time.time;
+            }
 
             if (isColliding)
             {
@@ -81,17 +89,40 @@ public class PlayerCombat : MonoBehaviour
                 }
             }
         }
+
+        if (nearBonfire && Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(sequenceManager.RestSequence());
+        }
+        
     }
 
-    void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
-        playerHp -= damage;
-        if (playerHp < 0)
+        currentHp -= damage;
+        if (currentHp < 0)
         {
-            playerHp = 0;
+            currentHp = 0;
             uiM.gameOver.SetActive(true);
             IsDead = true;
             Time.timeScale = 0f;
+        }
+    }
+
+    void GiveDamage(GameObject target, int damage)
+    {
+        EnemyCombat enemyCombat = target.GetComponent<EnemyCombat>();
+        Debug.Log("Enemy hit! - Caused " + damage + " damage!");
+        enemyCombat.TakeDamage(damage);
+    }
+
+    public void ReceiveHealing(int healing)
+    {
+        currentHp += healing;
+        anim.SetTrigger("isHealing");
+        if(currentHp > maxHp)
+        {
+            currentHp = maxHp;
         }
     }
 
@@ -108,16 +139,38 @@ public class PlayerCombat : MonoBehaviour
         isColliding = false;
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.CompareTag("Healing"))
+        {
+            ReceiveHealing(1);
+            Destroy(collider.gameObject);
+        }
+
+        if (collider.gameObject.CompareTag("Bonfire"))
+        {
+            Bonfire = collider.gameObject;
+            nearBonfire = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.CompareTag("Bonfire"))
+        {
+            nearBonfire = false;
+            Bonfire = gameObject;
+        }
+    }
 
     public void OnAttack()
     {
-        Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, radius, enemyLayer);
+        hit = Physics2D.OverlapCircle(attackPoint.position, radius, enemyLayer);
 
         if (hit != null)
         {
-            int damage = IsStrongAttack ? 2 : 1;
-            Debug.Log("Acertou o inimigo! - Causou " + damage + " de dano!");
-            //hit.GetComponentInChildren<SkeletonAnim>().OnHit();
+            playerDamage = IsStrongAttack ? 2 : 1;
+            GiveDamage(hit.gameObject, playerDamage);
         }
     }
 

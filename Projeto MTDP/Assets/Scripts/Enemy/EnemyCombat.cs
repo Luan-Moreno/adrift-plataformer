@@ -3,40 +3,41 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    private Rigidbody2D rig;
-    public float speed;
+
     public Transform point;
     public float radius;
     public LayerMask layer;
-    private Vector3 facingRight;
-    private Vector3 facingLeft;
-    private bool isRotating;
+    [SerializeField] private bool isAttacking;
+    [SerializeField] private int damage;
+    [SerializeField] private int enemyHp;
+    [SerializeField] private bool isDead;
+    private Animator anim;
+    private PlayerCombat playerCombat;
+    private EnemyMovement enemyMovement;
+    private Collider2D hit;
+
+    public bool IsDead { get => isDead; set => isDead = value; }
 
     void Start()
     {
-        rig = GetComponent<Rigidbody2D>();
-        facingRight = new Vector3(0f, 0f, 0f);
-        facingLeft = new Vector3(0f, 180f, 0f);
-        isRotating = false;
-    }
-
-    void Update()
-    {
-
+        anim = GetComponent<Animator>();
+        enemyMovement = GetComponent<EnemyMovement>();
+        playerCombat = FindAnyObjectByType<PlayerCombat>();
     }
 
     void FixedUpdate()
     {
-        rig.linearVelocity = new Vector2(speed, rig.linearVelocityY);
         OnCollision();
     }
 
     void OnCollision()
     {
-        Collider2D hit = Physics2D.OverlapCircle(point.position, radius, layer);
-        if (hit != null && !isRotating)
+        hit = Physics2D.OverlapCircle(point.position, radius, layer);
+        if (hit != null & !isAttacking)
         {
-            StartCoroutine("Rotate");
+            enemyMovement.IsMoving = false;
+            enemyMovement.Speed = 0f;
+            StartCoroutine("Attack");
         }
     }
 
@@ -45,20 +46,35 @@ public class EnemyCombat : MonoBehaviour
         Gizmos.DrawWireSphere(point.position, radius);
     }
 
-    private IEnumerator Rotate()
+    private IEnumerator Attack()
     {
-        isRotating = true;
-        if (transform.eulerAngles.y == 0)
+        yield return new WaitForSeconds(0.25f);
+        isAttacking = true;
+        anim.SetTrigger("isAttacking");
+        yield return new WaitForSeconds(0.5f);
+        isAttacking = false;
+        enemyMovement.Speed = enemyMovement.InitialSpeed;
+        enemyMovement.IsMoving = true;
+    }
+
+    public void GiveDamage()
+    {
+        if (hit != null)
         {
-            transform.eulerAngles = facingLeft;
-            speed = -Mathf.Abs(speed);
+            Debug.Log("Was Attacked! - Received " + damage + " damage!");
+            playerCombat.TakeDamage(damage);
         }
-        else
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        enemyHp -= damage;
+        if (enemyHp <= 0)
         {
-            transform.eulerAngles = facingRight;
-            speed = Mathf.Abs(speed);
+            enemyHp = 0;
+            isDead = true;
+            Debug.Log("The enemy died!");
+            Destroy(gameObject);
         }
-        yield return new WaitForSeconds(1);
-        isRotating = false;
     }
 }
