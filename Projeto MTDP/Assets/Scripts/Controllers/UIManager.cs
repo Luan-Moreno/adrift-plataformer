@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    #region Variables
     public GameObject settings;
     [SerializeField] private bool settingsState;
 
@@ -12,7 +13,8 @@ public class UIManager : MonoBehaviour
     public GameObject gameOver;
     [SerializeField] private bool pauseState;
     private Scene currentScene;
-    public Image fadePanel;
+    public GameObject fade;
+    private Image fadePanel;
     public float fadeDuration = 1f;
 
 
@@ -24,6 +26,8 @@ public class UIManager : MonoBehaviour
 
     public bool PauseState { get => pauseState; set => pauseState = value; }
 
+    #endregion
+
     void Start()
     {
         playerCombat = FindAnyObjectByType<PlayerCombat>();
@@ -31,6 +35,8 @@ public class UIManager : MonoBehaviour
         playerMovement = FindAnyObjectByType<PlayerMovement>();
         anim = playerAnim.GetComponent<Animator>();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
+        fadePanel = fade.transform.Find("FadePanel").GetComponent<Image>();
+
 
         if (settings != null)
         {
@@ -44,6 +50,7 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy)
         {
+            fade.SetActive(PauseState);
             PauseState = !PauseState;
             pauseMenu.SetActive(PauseState);
             Time.timeScale = PauseState ? 0f : 1f;
@@ -57,6 +64,7 @@ public class UIManager : MonoBehaviour
             if(!sequenceManager.IsResting)
             {
                 PauseState = false;
+                fade.SetActive(!PauseState);
                 pauseMenu.SetActive(PauseState);
                 Time.timeScale = PauseState ? 0f : 1f;
             }
@@ -77,6 +85,7 @@ public class UIManager : MonoBehaviour
     public void TurnSettings()
     {
         settingsState = !settingsState;
+        fade.SetActive(false);
         settings.SetActive(settingsState);
     }
 
@@ -86,7 +95,7 @@ public class UIManager : MonoBehaviour
         Application.Quit();
     }
 
-        public IEnumerator Fade(float startAlpha, float endAlpha)
+    public IEnumerator Fade(float startAlpha, float endAlpha)
     {
         float time = 0;
         Color color = fadePanel.color;

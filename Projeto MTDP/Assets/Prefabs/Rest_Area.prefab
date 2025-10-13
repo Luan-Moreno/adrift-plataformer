@@ -122,7 +122,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0051605552, y: 0.06335834}
+  m_Offset: {x: 0.00516057, y: 0.089933716}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -132,7 +132,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5432329, y: 0.25671667}
+  m_Size: {x: 0.5432329, y: 0.20356591}
   m_EdgeRadius: 0
 --- !u!1 &2038789801398910593
 GameObject:
@@ -230,7 +230,6 @@ GameObject:
   - component: {fileID: 3449340040239118598}
   - component: {fileID: 379603107757891663}
   - component: {fileID: 3615735672121213157}
-  - component: {fileID: 8350624985409826373}
   m_Layer: 0
   m_Name: Rest_Campfire
   m_TagString: Untagged
@@ -365,7 +364,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.058612347, y: 0.101594865}
+  m_Offset: {x: 0.058612347, y: 0.22521062}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -375,20 +374,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.0310693, y: 0.8431897}
+  m_Size: {x: 2.0310693, y: 0.59595823}
   m_EdgeRadius: 0
---- !u!114 &8350624985409826373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3192386140151461341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6195a2899be6e0499e857999d7797e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3497878656184835296
 GameObject:
   m_ObjectHideFlags: 0

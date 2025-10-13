@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : MonoBehaviour, IDataPersistence
 {
+    #region Variables
+
     [Header("Life/HP")]
     [SerializeField] private int currentHp;
     [SerializeField] private int maxHp;
@@ -24,7 +26,7 @@ public class PlayerCombat : MonoBehaviour
     private float chargeStartTime;
     private float lastAttackTime;
     private GameObject bonfire;
-    
+
     private Animator anim;
     private UIManager uiM;
     private SequenceManager sequenceManager;
@@ -37,10 +39,9 @@ public class PlayerCombat : MonoBehaviour
     public int CurrentHp { get => currentHp; set => currentHp = value; }
     public GameObject Bonfire { get => bonfire; set => bonfire = value; }
 
+    #endregion
     void Start()
     {
-        currentHp = MaxHp;
-        playerDamage = 1;
         anim = GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
@@ -94,8 +95,10 @@ public class PlayerCombat : MonoBehaviour
         {
             StartCoroutine(sequenceManager.RestSequence());
         }
-        
+
     }
+
+    #region Damage/Healing
 
     public void TakeDamage(int damage)
     {
@@ -103,6 +106,7 @@ public class PlayerCombat : MonoBehaviour
         if (currentHp < 0)
         {
             currentHp = 0;
+            uiM.fade.SetActive(false);
             uiM.gameOver.SetActive(true);
             IsDead = true;
             Time.timeScale = 0f;
@@ -120,11 +124,15 @@ public class PlayerCombat : MonoBehaviour
     {
         currentHp += healing;
         anim.SetTrigger("isHealing");
-        if(currentHp > maxHp)
+        if (currentHp > maxHp)
         {
             currentHp = maxHp;
         }
     }
+
+    #endregion
+
+    #region Collision/Trigger
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -178,5 +186,23 @@ public class PlayerCombat : MonoBehaviour
     {
         Gizmos.DrawWireSphere(attackPoint.position, radius);
     }
+
+    #endregion
+
+    #region Load/Save
+
+    public void SaveData(ref GameData data)
+    {
+        data.maxHp = this.maxHp;
+        data.playerDamage = this.playerDamage;
+    }
+    
+    public void LoadData(GameData data)
+    {
+        this.maxHp = data.maxHp;
+        this.playerDamage = data.playerDamage;
+    }
+
+    #endregion
     
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    #region Variables
     private Rigidbody2D rig;
     [SerializeField] private float initialSpeed;
     private float speed;
@@ -20,7 +21,8 @@ public class EnemyMovement : MonoBehaviour
     public bool IsMoving { get => isMoving; set => isMoving = value; }
     public float Speed { get => speed; set => speed = value; }
     public float InitialSpeed { get => initialSpeed; set => initialSpeed = value; }
-
+    #endregion
+    
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();

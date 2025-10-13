@@ -2,12 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SequenceManager : MonoBehaviour
+public class SequenceManager : MonoBehaviour, IDataPersistence
 {
+    #region Variables
     private bool isResting = false;
     private bool canRest = true;
     [SerializeField] private AudioClip bonfireTheme;
     [SerializeField][Range(0f, 1f)] private float bonfireVolume = 0.5f;
+    private Vector3 bonfireLocation = Vector3.zero;
 
     private PlayerCombat playerCombat;
     private PlayerMovement playerMovement;
@@ -17,6 +19,7 @@ public class SequenceManager : MonoBehaviour
     private GameManager gameManager;
 
     public bool IsResting { get => isResting; set => isResting = value; }
+    #endregion
 
     void Start()
     {
@@ -50,14 +53,15 @@ public class SequenceManager : MonoBehaviour
 
             if (playerCombat.Bonfire != null)
             {
-                playerCombat.transform.position = playerCombat.Bonfire.transform.position;
+                bonfireLocation = playerCombat.Bonfire.transform.position;
+                playerCombat.transform.position = bonfireLocation;
             }
 
             playerCombat.transform.eulerAngles = new Vector3(0f, 180f, 0f);
             anim.SetBool("isResting", true);
 
             // Salvar
-            gameManager.SaveGame();
+            //gameManager.SaveGame();
 
             yield return new WaitForSeconds(0.5f);
             yield return StartCoroutine(uiM.Fade(1, 0));
@@ -77,5 +81,19 @@ public class SequenceManager : MonoBehaviour
 
         yield return new WaitForSeconds(1);
         canRest = true;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        if (bonfireLocation != Vector3.zero)
+        {
+            data.playerPosition = bonfireLocation;
+            data.firstBonfire = true;
+        }
+    }
+    
+    public void LoadData(GameData data)
+    {
+        //this.transform.position = data.playerPosition;
     }
 }

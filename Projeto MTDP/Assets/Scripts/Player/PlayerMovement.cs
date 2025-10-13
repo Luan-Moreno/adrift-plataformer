@@ -1,8 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IDataPersistence
 {
+    #region Variables
     private Rigidbody2D rig;
     private Animator anim;
     private UIManager uiM;
@@ -30,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
     public float Speed { get => speed; set => speed = value; }
     public float InitialSpeed { get => initialSpeed; set => initialSpeed = value; }
 
+    #endregion
+
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
@@ -56,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
             Dash();
         }
     }
-
     void FixedUpdate()
     {
         if (!uiM.PauseState)
@@ -73,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    #region Movement
     void Rotate()
     {
         if (direction.x > 0)
@@ -140,6 +143,8 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
     }
 
+    #endregion
+    
     #region Collision
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -157,4 +162,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
+
+    public void SaveData(ref GameData data)
+    {
+        if(!data.firstBonfire)
+        {
+            data.playerPosition = data.firstSpawnpoint;
+        }
+    }
+    public void LoadData(GameData data)
+    {
+        this.transform.position = data.playerPosition;
+    }
 }

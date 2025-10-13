@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-
+    #region Variables
     public Transform point;
     public float radius;
     public LayerMask layer;
@@ -17,6 +17,7 @@ public class EnemyCombat : MonoBehaviour
     private Collider2D hit;
 
     public bool IsDead { get => isDead; set => isDead = value; }
+    #endregion
 
     void Start()
     {
@@ -30,6 +31,41 @@ public class EnemyCombat : MonoBehaviour
         OnCollision();
     }
 
+    private IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(0.25f);
+        isAttacking = true;
+        anim.SetTrigger("isAttacking");
+        yield return new WaitForSeconds(0.5f);
+        isAttacking = false;
+        enemyMovement.Speed = enemyMovement.InitialSpeed;
+        enemyMovement.IsMoving = true;
+    }
+
+    #region Damage
+    public void GiveDamage()
+    {
+        if (hit != null)
+        {
+            Debug.Log("Was Attacked! - Received " + damage + " damage!");
+            playerCombat.TakeDamage(damage);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        enemyHp -= damage;
+        if (enemyHp <= 0)
+        {
+            enemyHp = 0;
+            isDead = true;
+            Debug.Log("The enemy died!");
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+    
+    #region Collision
     void OnCollision()
     {
         hit = Physics2D.OverlapCircle(point.position, radius, layer);
@@ -45,36 +81,5 @@ public class EnemyCombat : MonoBehaviour
     {
         Gizmos.DrawWireSphere(point.position, radius);
     }
-
-    private IEnumerator Attack()
-    {
-        yield return new WaitForSeconds(0.25f);
-        isAttacking = true;
-        anim.SetTrigger("isAttacking");
-        yield return new WaitForSeconds(0.5f);
-        isAttacking = false;
-        enemyMovement.Speed = enemyMovement.InitialSpeed;
-        enemyMovement.IsMoving = true;
-    }
-
-    public void GiveDamage()
-    {
-        if (hit != null)
-        {
-            Debug.Log("Was Attacked! - Received " + damage + " damage!");
-            playerCombat.TakeDamage(damage);
-        }
-    }
-    
-    public void TakeDamage(int damage)
-    {
-        enemyHp -= damage;
-        if (enemyHp <= 0)
-        {
-            enemyHp = 0;
-            isDead = true;
-            Debug.Log("The enemy died!");
-            Destroy(gameObject);
-        }
-    }
+    #endregion
 }

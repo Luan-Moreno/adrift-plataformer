@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 644241142395411556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.09922059}
+  m_LocalPosition: {x: -26.14, y: 0, z: -0.09922059}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1624975077, guid: 66013c4aa4dec9743a4791560bb0808a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -353,11 +353,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
-  maxHp: 0
+  maxHp: 10
   isImmortal: 0
   isDead: 0
   nearBonfire: 0
-  isResting: 0
   isStrongAttack: 0
   attackPoint: {fileID: 6151177747686082231}
   radius: 0.52
