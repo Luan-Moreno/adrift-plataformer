@@ -11,12 +11,12 @@ public class UIManager : MonoBehaviour
 
     public GameObject pauseMenu;
     public GameObject gameOver;
+    public GameObject inventory;
     [SerializeField] private bool pauseState;
     private Scene currentScene;
     public GameObject fade;
     private Image fadePanel;
     public float fadeDuration = 1f;
-
 
     private PlayerCombat playerCombat;
     private PlayerMovement playerMovement;
@@ -48,11 +48,19 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy)
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy && !inventory.activeInHierarchy)
         {
             fade.SetActive(PauseState);
             PauseState = !PauseState;
             pauseMenu.SetActive(PauseState);
+            Time.timeScale = PauseState ? 0f : 1f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy && !pauseMenu.activeInHierarchy)
+        {
+            fade.SetActive(PauseState);
+            PauseState = !PauseState;
+            inventory.SetActive(PauseState);
             Time.timeScale = PauseState ? 0f : 1f;
         }
     }
