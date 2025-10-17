@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 589aa0eb6beae934db83102cbe04af2c, type: 3}
+  m_Name: HealingLeaf
+  m_EditorClassIdentifier: 
+  displayName: Healing Leaf
+  itemSprite: {fileID: 3591913627282589472, guid: e4c942d2cac570144a490048526b9a04, type: 3}
+  itemDescription: "A delicate green leaf infused with natural magic. When crushed
+    or brewed into a potion, it releases a soothing essence that accelerates the
+    body\u2019s natural healing process. Its faint, mint-like aroma brings calm even
+    before its effects take hold.\r\n"
+  itemName: HealingLeaf
+  quantity: 1
+  disappears: 1
+  healAmount: 1

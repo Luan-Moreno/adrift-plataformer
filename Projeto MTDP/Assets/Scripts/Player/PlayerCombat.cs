@@ -53,49 +53,42 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     {
         if (!uiM.PauseState && !isDead)
         {
-            if (Input.GetMouseButtonDown(0) && Time.time > lastAttackTime + attackCooldown)
-            {
-                IsCharging = true;
-                chargeStartTime = Time.time;
-                anim.SetBool("isCharging", true);
-            }
-
-            if (Input.GetMouseButtonUp(0) && IsCharging)
-            {
-                IsCharging = false;
-                float heldTime = Time.time - chargeStartTime;
-
-                if (heldTime < strongAttackHoldTime)
-                {
-                    IsStrongAttack = false;
-                    anim.SetBool("isCharging", false);
-                    anim.SetTrigger("isAttacking");
-                }
-                else
-                {
-                    IsStrongAttack = true;
-                    anim.SetBool("isCharging", false);
-                    anim.SetTrigger("isStrongAttacking");
-                }
-
-                lastAttackTime = Time.time;
-            }
-
-            if (isColliding)
-            {
-                if (Time.time > lastDamageTime + damageCooldown && !isImmortal)
-                {
-                    TakeDamage(1);
-                    lastDamageTime = Time.time;
-                }
-            }
+            Attack();
+            CollisionDamage();
         }
 
-        if (nearBonfire && Input.GetKeyDown(KeyCode.E))
+        BonfireDetector();
+    }
+
+    private void Attack()
+    {
+        if (Input.GetMouseButtonDown(0) && Time.time > lastAttackTime + attackCooldown)
         {
-            StartCoroutine(sequenceManager.RestSequence());
+            IsCharging = true;
+            chargeStartTime = Time.time;
+            anim.SetBool("isCharging", true);
         }
 
+        if (Input.GetMouseButtonUp(0) && IsCharging)
+        {
+            IsCharging = false;
+            float heldTime = Time.time - chargeStartTime;
+
+            if (heldTime < strongAttackHoldTime)
+            {
+                IsStrongAttack = false;
+                anim.SetBool("isCharging", false);
+                anim.SetTrigger("isAttacking");
+            }
+            else
+            {
+                IsStrongAttack = true;
+                anim.SetBool("isCharging", false);
+                anim.SetTrigger("isStrongAttacking");
+            }
+
+            lastAttackTime = Time.time;
+        }
     }
 
     #region Damage/Healing
@@ -130,6 +123,18 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         }
     }
 
+    void CollisionDamage()
+    {
+        if (isColliding)
+        {
+            if (Time.time > lastDamageTime + damageCooldown && !isImmortal)
+            {
+                TakeDamage(1);
+                lastDamageTime = Time.time;
+            }
+        }
+    }
+
     #endregion
 
     #region Collision/Trigger
@@ -149,12 +154,6 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Healing"))
-        {
-            ReceiveHealing(1);
-            Destroy(collider.gameObject);
-        }
-
         if (collider.gameObject.CompareTag("Bonfire"))
         {
             Bonfire = collider.gameObject;
@@ -191,6 +190,14 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     #region Load/Save
 
+    void BonfireDetector()
+    {
+        if (nearBonfire && Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(sequenceManager.RestSequence());
+        }
+    }
+
     public void SaveData(ref GameData data)
     {
         data.maxHp = this.maxHp;
@@ -199,6 +206,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     
     public void LoadData(GameData data)
     {
+        this.currentHp = data.maxHp;
         this.maxHp = data.maxHp;
         this.playerDamage = data.playerDamage;
     }

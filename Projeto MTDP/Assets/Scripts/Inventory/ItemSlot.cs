@@ -6,9 +6,9 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : MonoBehaviour, IPointerClickHandler
 {
-
     [Header("Item Data")]
     public string itemName;
+    public string displayName;
     public int quantity;
     public Sprite itemSprite;
     public bool isFull;
@@ -34,9 +34,10 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         inventoryManager = FindAnyObjectByType<InventoryManager>();
     }
 
-    public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription)
+    public void AddItem(string itemName, string displayName, int quantity, Sprite itemSprite, string itemDescription)
     {
         this.itemName = itemName;
+        this.displayName = displayName;
         this.quantity = quantity;
         this.itemSprite = itemSprite;
         this.itemDescription = itemDescription;
@@ -54,7 +55,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         selectedPanel.SetActive(true);
         thisItemSelected = true;
 
-        itemDescriptionName.text = itemName;
+        itemDescriptionName.text = displayName;
         itemDescriptionText.text = itemDescription;
         itemDescriptionImage.sprite = itemSprite;
         
@@ -81,4 +82,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             OnRightClick();
         }
     }
+
+
 }

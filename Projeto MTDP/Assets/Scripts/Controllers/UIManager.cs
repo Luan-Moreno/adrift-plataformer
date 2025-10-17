@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     private PlayerAnim playerAnim;
     private Animator anim;
     private SequenceManager sequenceManager;
+    private InventoryManager inventoryManager;
 
     public bool PauseState { get => pauseState; set => pauseState = value; }
 
@@ -35,6 +36,7 @@ public class UIManager : MonoBehaviour
         playerMovement = FindAnyObjectByType<PlayerMovement>();
         anim = playerAnim.GetComponent<Animator>();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
+        inventoryManager = FindAnyObjectByType<InventoryManager>();
         fadePanel = fade.transform.Find("FadePanel").GetComponent<Image>();
 
 

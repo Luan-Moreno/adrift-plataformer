@@ -6,7 +6,6 @@ public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
-
     public static DataPersistenceManager instance { get; private set; }
     private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
