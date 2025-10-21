@@ -334,9 +334,10 @@ MonoBehaviour:
   initialSpeed: 5
   point: {fileID: 7671674765253829653}
   radius: 0.3
+  rotationTime: 0.8
   layer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 72
 --- !u!114 &6136870273471513839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,6 +358,7 @@ MonoBehaviour:
   isAttacking: 0
   damage: 2
   enemyHp: 5
+  maxEnemyHp: 5
   isDead: 0
 --- !u!95 &7388858581680697558
 Animator:
@@ -405,7 +407,7 @@ Transform:
   m_GameObject: {fileID: 8165221074585622647}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.468, y: -0.068, z: 0}
+  m_LocalPosition: {x: 0.499, y: -0.068, z: 0}
   m_LocalScale: {x: 1.0475534, y: 1.0475534, z: 1.0475534}
   m_ConstrainProportionsScale: 0
   m_Children: []

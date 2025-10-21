@@ -10,6 +10,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private bool isAttacking;
     [SerializeField] private int damage;
     [SerializeField] private int enemyHp;
+    [SerializeField] private int maxEnemyHp;
     [SerializeField] private bool isDead;
     private Animator anim;
     private PlayerCombat playerCombat;
@@ -24,6 +25,7 @@ public class EnemyCombat : MonoBehaviour
         anim = GetComponent<Animator>();
         enemyMovement = GetComponent<EnemyMovement>();
         playerCombat = FindAnyObjectByType<PlayerCombat>();
+        enemyHp = maxEnemyHp;
     }
 
     void FixedUpdate()
@@ -48,7 +50,10 @@ public class EnemyCombat : MonoBehaviour
         if (hit != null)
         {
             Debug.Log("Was Attacked! - Received " + damage + " damage!");
-            playerCombat.TakeDamage(damage);
+            if(!playerCombat.IsImmortal)
+            {
+                playerCombat.TakeDamage(damage);
+            }
         }
     }
 
@@ -59,21 +64,28 @@ public class EnemyCombat : MonoBehaviour
         {
             enemyHp = 0;
             isDead = true;
-            Debug.Log("The enemy died!");
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            Debug.Log("Enemy died!");
         }
     }
     #endregion
+
+    public void Respawn()
+    {
+        isDead = false;
+        enemyHp = maxEnemyHp;
+        gameObject.SetActive(true);
+    }
     
     #region Collision
     void OnCollision()
     {
         hit = Physics2D.OverlapCircle(point.position, radius, layer);
-        if (hit != null & !isAttacking)
+        if (hit != null && hit.CompareTag("Player") && !isAttacking)
         {
             enemyMovement.IsMoving = false;
             enemyMovement.Speed = 0f;
-            StartCoroutine("Attack");
+            StartCoroutine(Attack());
         }
     }
 

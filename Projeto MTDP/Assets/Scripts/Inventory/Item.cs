@@ -23,16 +23,29 @@ public class Item : MonoBehaviour, IDataPersistence
     {
         if (collider.CompareTag("Player"))
         {
-            inventoryManager.AddItem(
-            itemData.itemName,
-            itemData.displayName,
-            itemData.quantity,
-            itemData.itemSprite,
-            itemData.itemDescription
-            );
+            if (gameObject.CompareTag("Weapon"))
+            {
+                inventoryManager.AddWeapon(
+                itemData.itemName,
+                itemData.displayName,
+                itemData.itemSprite,
+                itemData.itemDescription
+                );
+            }
+            else
+            {
+                int leftOverItems = inventoryManager.AddItem(
+                itemData.itemName,
+                itemData.displayName,
+                itemData.quantity,
+                itemData.itemSprite,
+                itemData.itemDescription
+                );
 
-            itemData.OnUse(collider.gameObject);
-            
+                if (leftOverItems == 0) { Destroy(gameObject); }
+                else { itemData.quantity = leftOverItems; }
+            }
+
             if (itemData.disappears) { gameObject.SetActive(false); }
             collected = true;
         }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1def6bd1a9406e49bd6e958c9aabfb1, type: 3}
+  m_Name: WoodsKey2
+  m_EditorClassIdentifier: 
+  displayName: Woods Key2
+  itemSprite: {fileID: 767973707216567960, guid: 8a70b7401649a1f4fa633837eb2116c6, type: 3}
+  itemDescription: An ancient wooden key carved with runic symbols. It seems crafted
+    to unlock hidden gates deep within the forest. Only doors marked with the same
+    symbol will accept this key.
+  itemName: WoodsKey2
+  quantity: 1
+  disappears: 1
+  doorGUID: c7c400b3-6047-4be9-83a4-66f751b50118

@@ -11,8 +11,10 @@ public class GameData
     public Vector3 firstSpawnpoint = new(-39.8f, -3.26f, 1.49f);
     public bool firstBonfire;
     public SerializableDictionary<string, bool> collectables;
+    public SerializableDictionary<string, bool> doors;
     public List<string> itemNames;
     public List<int> itemQuantities;
+    public List<string> weaponNames;
 
     //Construtor com valores default para novo jogo
     public GameData()
@@ -22,7 +24,9 @@ public class GameData
         this.firstBonfire = false;
         playerPosition = firstSpawnpoint;
         collectables = new SerializableDictionary<string, bool>();
+        doors = new SerializableDictionary<string, bool>();
         itemNames = new();
         itemQuantities = new();
+        weaponNames = new();
     }
 }

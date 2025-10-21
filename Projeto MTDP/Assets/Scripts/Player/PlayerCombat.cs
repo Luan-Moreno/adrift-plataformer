@@ -33,11 +33,13 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     private Collider2D hit;
 
     public bool IsDead { get => isDead; set => isDead = value; }
+    public bool IsImmortal { get => isImmortal; set => isImmortal = value; }
     public bool IsCharging { get => isCharging; set => isCharging = value; }
     public bool IsStrongAttack { get => isStrongAttack; set => isStrongAttack = value; }
     public int MaxHp { get => maxHp; set => maxHp = value; }
     public int CurrentHp { get => currentHp; set => currentHp = value; }
     public GameObject Bonfire { get => bonfire; set => bonfire = value; }
+    
 
     #endregion
     void Start()
@@ -127,7 +129,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     {
         if (isColliding)
         {
-            if (Time.time > lastDamageTime + damageCooldown && !isImmortal)
+            if (Time.time > lastDamageTime + damageCooldown && !IsImmortal)
             {
                 TakeDamage(1);
                 lastDamageTime = Time.time;

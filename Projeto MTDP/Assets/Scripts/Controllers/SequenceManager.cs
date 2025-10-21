@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +12,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     [SerializeField] private AudioClip bonfireTheme;
     [SerializeField][Range(0f, 1f)] private float bonfireVolume = 0.5f;
     private Vector3 bonfireLocation = Vector3.zero;
+    IEnumerable<EnemyCombat> enemyObjects;
 
     private PlayerCombat playerCombat;
     private PlayerMovement playerMovement;
@@ -29,6 +32,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         anim = playerAnim.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
+        enemyObjects = FindAllEnemies();
     }
     void Update()
     {
@@ -44,9 +48,11 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         if (!IsResting)
         {
             IsResting = true;
+            playerCombat.IsImmortal = true;
             playerMovement.Speed = 0f;
             playerCombat.ReceiveHealing(playerCombat.MaxHp);
             //playerCombat.RechargeItems();
+            uiM.fade.SetActive(true);
             yield return StartCoroutine(uiM.Fade(0, 1));
 
             AudioManager.instance.PlayTemporaryBGM(bonfireTheme, bonfireVolume);
@@ -64,19 +70,33 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             //gameManager.SaveGame();
 
             yield return new WaitForSeconds(0.5f);
+            
             yield return StartCoroutine(uiM.Fade(1, 0));
+            uiM.fade.SetActive(false);
+
             uiM.PauseState = true;
+            DataPersistenceManager.instance.SaveGame();
         }
         else
         {
+            foreach (EnemyCombat enemy in enemyObjects)
+            {
+                enemy.Respawn();
+            }
+            uiM.fade.SetActive(true);
             yield return StartCoroutine(uiM.Fade(0, 1));
+
             anim.SetBool("isResting", false);
             uiM.PauseState = false;
             yield return new WaitForSeconds(0.5f);
             playerMovement.Speed = playerMovement.InitialSpeed;
-            yield return StartCoroutine(uiM.Fade(1, 0));
-            IsResting = false;
             AudioManager.instance.RestorePreviousBGM();
+
+            yield return StartCoroutine(uiM.Fade(1, 0));
+            uiM.fade.SetActive(false);
+
+            IsResting = false;
+            playerCombat.IsImmortal = false;
         }
 
         yield return new WaitForSeconds(1);
@@ -91,9 +111,15 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             data.firstBonfire = true;
         }
     }
-    
+
     public void LoadData(GameData data)
     {
         //this.transform.position = data.playerPosition;
+    }
+    
+    private List<EnemyCombat> FindAllEnemies()
+    {
+        IEnumerable<EnemyCombat> enemyObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<EnemyCombat>();
+        return new List<EnemyCombat>(enemyObjects);
     }
 }

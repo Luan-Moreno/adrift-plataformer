@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - Healing
   - Bonfire
+  - Weapon
+  - Door
+  - Key
   layers:
   - Default
   - TransparentFX

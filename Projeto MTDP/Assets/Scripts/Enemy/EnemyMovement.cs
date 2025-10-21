@@ -9,9 +9,11 @@ public class EnemyMovement : MonoBehaviour
     private float speed;
     [SerializeField] private Transform point;
     [SerializeField] private float radius;
+    [SerializeField] private float rotationTime;
     [SerializeField] private LayerMask layer;
     private Vector3 facingRight;
     private Vector3 facingLeft;
+    
     private bool isRotating;
     private Animator anim;
     private UIManager uiM;
@@ -56,9 +58,9 @@ public class EnemyMovement : MonoBehaviour
     void OnCollision()
     {
         Collider2D hit = Physics2D.OverlapCircle(point.position, radius, layer);
-        if (hit != null && !isRotating)
+        if (hit != null && hit.gameObject != gameObject && !isRotating)
         {
-            StartCoroutine("Rotate");
+            StartCoroutine(Rotate());
         }
     }
 
@@ -82,7 +84,7 @@ public class EnemyMovement : MonoBehaviour
             Speed = Mathf.Abs(Speed);
             InitialSpeed = Mathf.Abs(InitialSpeed);
         }
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(rotationTime);
         isRotating = false;
     }
 }

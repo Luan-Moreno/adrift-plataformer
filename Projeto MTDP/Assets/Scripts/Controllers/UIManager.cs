@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
 {
     #region Variables
     public GameObject settings;
-    [SerializeField] private bool settingsState;
+    [SerializeField] private bool settingsState = false;
 
     public GameObject pauseMenu;
     public GameObject gameOver;
@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
         sequenceManager = FindAnyObjectByType<SequenceManager>();
         inventoryManager = FindAnyObjectByType<InventoryManager>();
         fadePanel = fade.transform.Find("FadePanel").GetComponent<Image>();
+        fade.SetActive(false);
 
 
         if (settings != null)
@@ -52,7 +53,6 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy && !inventory.activeInHierarchy)
         {
-            fade.SetActive(PauseState);
             PauseState = !PauseState;
             pauseMenu.SetActive(PauseState);
             Time.timeScale = PauseState ? 0f : 1f;
@@ -60,7 +60,6 @@ public class UIManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy && !pauseMenu.activeInHierarchy)
         {
-            fade.SetActive(PauseState);
             PauseState = !PauseState;
             inventory.SetActive(PauseState);
             Time.timeScale = PauseState ? 0f : 1f;
@@ -71,10 +70,9 @@ public class UIManager : MonoBehaviour
     {
         if (pauseMenu != null)
         {
-            if(!sequenceManager.IsResting)
+            if (!sequenceManager.IsResting)
             {
                 PauseState = false;
-                fade.SetActive(!PauseState);
                 pauseMenu.SetActive(PauseState);
                 Time.timeScale = PauseState ? 0f : 1f;
             }
@@ -83,7 +81,12 @@ public class UIManager : MonoBehaviour
 
     public void ChangeScene(string sceneName)
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName);
+        if(sceneName == "MainMenu")
+        {
+            DataPersistenceManager.instance.SaveGame();
+        }
     }
     
     public void ReloadScene()
@@ -95,7 +98,6 @@ public class UIManager : MonoBehaviour
     public void TurnSettings()
     {
         settingsState = !settingsState;
-        fade.SetActive(false);
         settings.SetActive(settingsState);
     }
 

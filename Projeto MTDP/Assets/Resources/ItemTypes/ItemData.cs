@@ -15,4 +15,6 @@ public abstract class ItemData : ScriptableObject
     public bool disappears = true;
 
     public abstract void OnUse(GameObject player);
+
+    public virtual bool CanUse(GameObject player) {return true;}
 }
