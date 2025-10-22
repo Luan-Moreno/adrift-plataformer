@@ -67,10 +67,11 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             {
               rig.linearVelocity = new Vector2(direction.x * Speed, rig.linearVelocity.y);
             }
-            if (isJumping)
+            if (isJumping && isGrounded)
             {
-                rig.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
                 isJumping = false;
+                isGrounded = false;
+                rig.linearVelocity = new Vector2(rig.linearVelocity.x, jumpForce);
             }
         }
     }
@@ -105,6 +106,11 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space) && rig.linearVelocity.y > 0)
+        {
+            rig.linearVelocity = new Vector2(rig.linearVelocity.x, 0f);
         }
     }
 
