@@ -185,6 +185,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, radius);
     }
 

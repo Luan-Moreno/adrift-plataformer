@@ -9,11 +9,13 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
     private UIManager uiM;
     private PlayerCombat playerCombat;
     private TrailRenderer trailRenderer;
-    
+
     [Header("Movimentation Variables")]
     [SerializeField] private float initialSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float coyoteTime;
+    [SerializeField] private bool isJumpBuffer;
     [SerializeField] private float dashVelocity;
     [SerializeField] private float dashDuration;
     private Vector2 direction;
@@ -21,11 +23,25 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
 
     [Header("Checks")]
     [SerializeField] private bool isMoving;
+    [SerializeField] private bool wallHit;
     [SerializeField] private bool isGrounded;
+    [SerializeField] private bool isCoyoteGrounded;
     [SerializeField] private bool isJumping;
     [SerializeField] private bool isDashing;
     [SerializeField] private bool canDash;
     private float facing;
+    private Coroutine coyoteCoroutine;
+
+    [Header("Ground Checks")]
+    [SerializeField] private LayerMask groundLayer;
+
+    [SerializeField] private Transform groundCheckerPoint;
+    [SerializeField] private float groundCheckerRadius;
+    [SerializeField] private Transform jumpBufferPoint;
+    [SerializeField] private float jumpBufferRadius;
+
+    private Collider2D detectGround;
+    private Collider2D detectGroundBuffer;
 
     public bool IsMoving { get => isMoving; set => isMoving = value; }
     public float Speed { get => speed; set => speed = value; }
@@ -53,9 +69,11 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         {
             direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             IsMoving = direction.x != 0;
+            GroundCheck();
             Rotate();
             Run();
             Jump();
+            JumpBuffer();
             Dash();
         }
     }
@@ -65,12 +83,13 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         {
             if (!isDashing)
             {
-              rig.linearVelocity = new Vector2(direction.x * Speed, rig.linearVelocity.y);
+                rig.linearVelocity = new Vector2(direction.x * Speed, rig.linearVelocity.y);
             }
-            if (isJumping && isGrounded)
+            if (isJumping && isCoyoteGrounded)
             {
                 isJumping = false;
                 isGrounded = false;
+                isCoyoteGrounded = false;
                 rig.linearVelocity = new Vector2(rig.linearVelocity.x, jumpForce);
             }
         }
@@ -103,9 +122,10 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
 
     void Jump()
     {
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if ((isCoyoteGrounded || isJumpBuffer) && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
+            isJumpBuffer = false;
         }
 
         if (Input.GetKeyUp(KeyCode.Space) && rig.linearVelocity.y > 0)
@@ -122,7 +142,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             canDash = false;
             trailRenderer.emitting = true;
 
-            dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), (Input.GetAxisRaw("Vertical") / 3));
+            dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical") / 3);
             if (dashDirection == Vector2.zero)
             {
                 facing = transform.eulerAngles.y == 0f ? 1f : -1f;
@@ -133,11 +153,13 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
 
         if (isDashing)
         {
+            isCoyoteGrounded = false;
             rig.linearVelocity = dashDirection.normalized * dashVelocity;
         }
 
         if (isGrounded && !isDashing)
         {
+            isCoyoteGrounded = true;
             canDash = true;
         }
     }
@@ -149,24 +171,56 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         isDashing = false;
     }
 
-    #endregion
-    
-    #region Collision
-    void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator CoyoteTime()
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        yield return new WaitForSeconds(coyoteTime);
+        isCoyoteGrounded = false;
+    }
+
+    #endregion
+
+    #region Collision
+
+    void GroundCheck()
+    {
+        detectGround = Physics2D.OverlapCircle(groundCheckerPoint.position, groundCheckerRadius, groundLayer);
+        if (detectGround != null)
         {
             isGrounded = true;
+            isCoyoteGrounded = isGrounded;
+            
+            if (coyoteCoroutine != null)
+            {
+                StopCoroutine(coyoteCoroutine);
+                coyoteCoroutine = null;
+            }
+        }
+        else
+        {
+            isGrounded = false;
+            if (coyoteCoroutine != null)
+            {
+                StopCoroutine(coyoteCoroutine);
+            }
+
+            coyoteCoroutine = StartCoroutine(CoyoteTime());
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    void JumpBuffer()
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
+        detectGroundBuffer = Physics2D.OverlapCircle(jumpBufferPoint.position, jumpBufferRadius, groundLayer);
+        isJumpBuffer = detectGroundBuffer != null;
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(groundCheckerPoint.position, groundCheckerRadius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(jumpBufferPoint.position, jumpBufferRadius);
+    }
+
     #endregion
 
     public void SaveData(ref GameData data)
