@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Item : MonoBehaviour, IDataPersistence
+public class Weapon : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private string uniqueId;
     [SerializeField] private bool collected = false;
@@ -23,16 +23,12 @@ public class Item : MonoBehaviour, IDataPersistence
     {
         if (collider.CompareTag("Player"))
         {
-            int leftOverItems = inventoryManager.AddItem(
+            inventoryManager.AddWeapon(
             itemData.itemName,
             itemData.displayName,
-            itemData.quantity,
             itemData.itemSprite,
             itemData.itemDescription
             );
-
-            if (leftOverItems == 0) { Destroy(gameObject); }
-            else { itemData.quantity = leftOverItems; }
 
             if (itemData.disappears) { gameObject.SetActive(false); }
             collected = true;

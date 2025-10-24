@@ -1,36 +1,60 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour, IDataPersistence
 {
     #region Variables
+    private PlayerMovement playerMovement;
+    private Animator anim;
+    private Animator meleeAnim;
+    private UIManager uiM;
+    private SequenceManager sequenceManager;
+    private Collider2D hit;
 
     [Header("Life/HP")]
     [SerializeField] private int currentHp;
     [SerializeField] private int maxHp;
-    private bool isColliding;
     [SerializeField] private bool isImmortal;
+    [SerializeField] private float invulnerableTime = 1f;
+    private SpriteRenderer spriteRenderer;
+    [SerializeField] private Color normalColor;
+    [SerializeField] private Color flashColor;
+    
     [SerializeField] private bool isDead;
-    private bool isCharging;
     [SerializeField] private bool nearBonfire;
+    private GameObject bonfire;
+    private bool isColliding;
 
     [Header("Damage/Attack")]
     [SerializeField] private bool isStrongAttack;
-    [SerializeField] private Transform attackPoint;
     [SerializeField] private float radius;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private float strongAttackHoldTime;
+
+    [Header("Attack Points")]
+    [SerializeField] private Transform currentAttackPoint;
+    [SerializeField] private Transform attackPointForward;
+    [SerializeField] private Transform attackPointUp;
+    [SerializeField] private Transform attackPointDown;
+
+    private bool isCharging;
     private int playerDamage;
     private float damageCooldown = 1f;
     private float lastDamageTime;
     private float chargeStartTime;
     private float lastAttackTime;
-    private GameObject bonfire;
-
-    private Animator anim;
-    private UIManager uiM;
-    private SequenceManager sequenceManager;
-    private Collider2D hit;
+    [SerializeField] private bool meleeAttack;
+    
+    //
+    public float defaultForce = 30;
+    public float upwardsForce = 60;
+    public float movementTime = 0.1f;
+    private Vector2 direction;
+    private bool collided;
+    private bool downwardStrike;
+    private Rigidbody2D rig;
+    //
 
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsImmortal { get => isImmortal; set => isImmortal = value; }
@@ -44,12 +68,20 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     #endregion
     void Start()
     {
+        rig = GetComponent<Rigidbody2D>();
+        playerMovement = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
+        meleeAnim = FindAnyObjectByType<MeleeWeapon>().gameObject.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
         Bonfire = gameObject;
         isColliding = false;
         IsDead = false;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.material = Instantiate(spriteRenderer.material);
+        normalColor = spriteRenderer.material.GetColor("_Color");
+        flashColor = Color.red;
     }
     void Update()
     {
@@ -62,8 +94,47 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         BonfireDetector();
     }
 
+    void FixedUpdate()
+    {
+        HandleAttackMovement();
+    }
+
     private void Attack()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            meleeAttack = true;
+        }
+        else
+        {
+            meleeAttack = false;
+        }
+
+        if (meleeAttack && Input.GetAxis("Vertical") > 0)
+        {
+            Debug.Log("Ataque pra cima");
+            currentAttackPoint = attackPointUp;
+            //anim.SetTrigger("UpwardAttack");
+            //meleeAnim.SetTrigger("UpwardAttackSwipe");
+        }
+
+        if (meleeAttack && Input.GetAxis("Vertical") < 0 && !playerMovement.IsGrounded)
+        {
+            Debug.Log("Ataque pra baixo");
+            currentAttackPoint = attackPointDown;
+            //anim.SetTrigger("DownwardAttack");
+            //meleeAnim.SetTrigger("DownwardAttackSwipe");
+        }
+
+        if ((meleeAttack && Input.GetAxis("Vertical") == 0) ||
+        meleeAttack && Input.GetAxis("Vertical") < 0 && playerMovement.IsGrounded)
+        {
+            Debug.Log("Ataque lateral");
+            currentAttackPoint = attackPointForward;
+            //anim.SetTrigger("ForwardAttack");
+            //meleeAnim.SetTrigger("ForwardAttackSwipe");
+        }
+
         if (Input.GetMouseButtonDown(0) && Time.time > lastAttackTime + attackCooldown)
         {
             IsCharging = true;
@@ -97,6 +168,8 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     public void TakeDamage(int damage)
     {
+        if (isImmortal || IsDead) return;
+
         currentHp -= damage;
         if (currentHp < 0)
         {
@@ -106,13 +179,45 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
             IsDead = true;
             Time.timeScale = 0f;
         }
+        else
+        {
+            StartCoroutine(Invulnerability());
+        }
+    }
+
+    private IEnumerator Invulnerability()
+    {
+        isImmortal = true;
+
+        float elapsed = 0f;
+        float flashSpeed = 0.3f;
+
+        while (elapsed < invulnerableTime)
+        {
+            spriteRenderer.material.SetColor("_Color", flashColor);
+            yield return new WaitForSeconds(flashSpeed);
+            spriteRenderer.material.SetColor("_Color", normalColor);
+            yield return new WaitForSeconds(flashSpeed);
+            elapsed += flashSpeed * 2f;
+        }
+
+        spriteRenderer.material.SetColor("_Color", normalColor);
+        isImmortal = false;
     }
 
     void GiveDamage(GameObject target, int damage)
     {
         EnemyCombat enemyCombat = target.GetComponent<EnemyCombat>();
         Debug.Log("Enemy hit! - Caused " + damage + " damage!");
-        enemyCombat.TakeDamage(damage);
+        if (IsStrongAttack)
+        {
+            enemyCombat.TakeHighDamage(damage);
+        }
+        else
+        {
+            enemyCombat.TakeDamage(damage);
+        }
+        
     }
 
     public void ReceiveHealing(int healing)
@@ -174,19 +279,95 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     public void OnAttack()
     {
-        hit = Physics2D.OverlapCircle(attackPoint.position, radius, enemyLayer);
+        hit = Physics2D.OverlapCircle(currentAttackPoint.position, radius, enemyLayer);
 
         if (hit != null)
         {
-            playerDamage = IsStrongAttack ? 2 : 1;
-            GiveDamage(hit.gameObject, playerDamage);
+            if (hit.GetComponent<HazardBehaviour>())
+            {
+                HandleAttackCollision(hit.GetComponent<HazardBehaviour>());
+                StartCoroutine(HitPause());
+            }
+
+            if (hit.CompareTag("Enemy"))
+            {
+                playerDamage = IsStrongAttack ? 2 : 1;
+                GiveDamage(hit.gameObject, playerDamage);
+                StartCoroutine(HitPause());
+            }
         }
+    }
+    
+    private IEnumerator HitPause()
+    {
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(0.05f);
+        Time.timeScale = 1f;
+    }
+
+    private void HandleAttackCollision(HazardBehaviour hazardObj)
+    {
+        if (hazardObj.giveUpwardForce && Input.GetAxis("Vertical") < 0 && !playerMovement.IsGrounded)
+        {
+            direction = Vector2.up;
+            downwardStrike = true;
+            collided = true;
+        }
+
+        if (Input.GetAxis("Vertical") > 0 && !playerMovement.IsGrounded)
+        {
+            direction = Vector2.down;
+            downwardStrike = true;
+            collided = true;
+        }
+
+        if ((Input.GetAxis("Vertical") <= 0 && playerMovement.IsGrounded) || Input.GetAxis("Vertical") == 0)
+        {
+            if (playerMovement.IsFacingLeft)
+            {
+                direction = Vector2.right;
+            }
+            else
+            {
+                direction = Vector2.left;
+            }
+            collided = true;
+        }
+        hazardObj.Damage(playerDamage);
+        StartCoroutine(NoLongerColliding());
+    }
+
+    private void HandleAttackMovement()
+    {
+        if (collided)
+        {
+            if (downwardStrike)
+            {
+                rig.linearVelocity = new Vector2(rig.linearVelocityX, 0f);
+                rig.AddForce(direction * upwardsForce, ForceMode2D.Impulse);
+            }
+            else
+            {
+                rig.AddForce(direction * defaultForce);
+            }
+        }
+    }
+    
+    private IEnumerator NoLongerColliding()
+    {
+        yield return new WaitForSeconds(movementTime);
+        collided = false;
+        downwardStrike = false;
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, radius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(attackPointForward.position, radius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(attackPointUp.position, radius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(attackPointDown.position, radius);
     }
 
     #endregion

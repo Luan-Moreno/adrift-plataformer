@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
     [SerializeField] private bool isDashing;
     [SerializeField] private bool canDash;
     private float facing;
+    private bool isFacingRight;
+    private bool isFacingLeft;
     private Coroutine coyoteCoroutine;
 
     [Header("Ground Checks")]
@@ -46,6 +48,9 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
     public bool IsMoving { get => isMoving; set => isMoving = value; }
     public float Speed { get => speed; set => speed = value; }
     public float InitialSpeed { get => initialSpeed; set => initialSpeed = value; }
+    public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
+    public bool IsFacingRight { get => isFacingRight; set => isFacingRight = value; }
+    public bool IsFacingLeft { get => isFacingLeft; set => isFacingLeft = value; }
 
     #endregion
 
@@ -57,11 +62,12 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         playerCombat = GetComponent<PlayerCombat>();
         trailRenderer = GetComponent<TrailRenderer>();
         IsMoving = false;
-        isGrounded = false;
+        IsGrounded = false;
         isJumping = false;
         isDashing = false;
         canDash = false;
         Speed = InitialSpeed;
+        facing = 1f;
     }
     void Update()
     {
@@ -88,7 +94,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             if (isJumping && isCoyoteGrounded)
             {
                 isJumping = false;
-                isGrounded = false;
+                IsGrounded = false;
                 isCoyoteGrounded = false;
                 rig.linearVelocity = new Vector2(rig.linearVelocity.x, jumpForce);
             }
@@ -101,18 +107,25 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         if (direction.x > 0)
         {
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            IsFacingRight = true;
+            IsFacingLeft = false;
+            facing = 1f;
+            
         }
         if (direction.x < 0)
         {
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            IsFacingRight = false;
+            IsFacingLeft = true;
+            facing = -1f;
         }
     }
 
     void Run()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && isGrounded)
+        if (Input.GetKey(KeyCode.LeftShift) && IsGrounded)
         {
-            Speed = InitialSpeed * 1.75f;
+            Speed = InitialSpeed * 1.5f;
         }
         else
         {
@@ -142,10 +155,9 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             canDash = false;
             trailRenderer.emitting = true;
 
-            dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical") / 3);
+            dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             if (dashDirection == Vector2.zero)
             {
-                facing = transform.eulerAngles.y == 0f ? 1f : -1f;
                 dashDirection = new Vector2(facing, 0);
             }
             StartCoroutine(StopDashing());
@@ -154,10 +166,13 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         if (isDashing)
         {
             isCoyoteGrounded = false;
-            rig.linearVelocity = dashDirection.normalized * dashVelocity;
+            dashDirection = dashDirection.normalized;
+            dashDirection.x *= 0.9f;
+            dashDirection.y *= 0.75f;
+            rig.linearVelocity = dashDirection * dashVelocity;
         }
 
-        if (isGrounded && !isDashing)
+        if (IsGrounded && !isDashing)
         {
             isCoyoteGrounded = true;
             canDash = true;
@@ -186,8 +201,8 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         detectGround = Physics2D.OverlapCircle(groundCheckerPoint.position, groundCheckerRadius, groundLayer);
         if (detectGround != null)
         {
-            isGrounded = true;
-            isCoyoteGrounded = isGrounded;
+            IsGrounded = true;
+            isCoyoteGrounded = IsGrounded;
             
             if (coyoteCoroutine != null)
             {
@@ -197,7 +212,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         }
         else
         {
-            isGrounded = false;
+            IsGrounded = false;
             if (coyoteCoroutine != null)
             {
                 StopCoroutine(coyoteCoroutine);

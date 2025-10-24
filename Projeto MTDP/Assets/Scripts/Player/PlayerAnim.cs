@@ -5,10 +5,11 @@ public class PlayerAnim : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerCombat playerCombat;
     private Animator anim;
+
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        playerCombat = GetComponent<PlayerCombat>();    
+        playerCombat = GetComponent<PlayerCombat>();
         anim = GetComponent<Animator>();
     }
 

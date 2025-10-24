@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class EnemyCombat : MonoBehaviour
 {
@@ -11,11 +12,15 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private int damage;
     [SerializeField] private int enemyHp;
     [SerializeField] private int maxEnemyHp;
+    private SpriteRenderer spriteRenderer;
+    private Color normalColor;
+    [SerializeField] private Color flashColor;
     [SerializeField] private bool isDead;
     private Animator anim;
     private PlayerCombat playerCombat;
     private EnemyMovement enemyMovement;
     private Collider2D hit;
+    private CinemachineImpulseSource impulseSource;
 
     public bool IsDead { get => isDead; set => isDead = value; }
     #endregion
@@ -26,6 +31,9 @@ public class EnemyCombat : MonoBehaviour
         enemyMovement = GetComponent<EnemyMovement>();
         playerCombat = FindAnyObjectByType<PlayerCombat>();
         enemyHp = maxEnemyHp;
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        normalColor = spriteRenderer.color;
     }
 
     void FixedUpdate()
@@ -60,6 +68,10 @@ public class EnemyCombat : MonoBehaviour
     public void TakeDamage(int damage)
     {
         enemyHp -= damage;
+        if (CameraManager.instance.CanShake)
+        {
+            CameraManager.instance.CameraShake(impulseSource);
+        }
         if (enemyHp <= 0)
         {
             enemyHp = 0;
@@ -67,7 +79,39 @@ public class EnemyCombat : MonoBehaviour
             gameObject.SetActive(false);
             Debug.Log("Enemy died!");
         }
+        else
+        {
+            StartCoroutine(DamageEffect());
+        }
     }
+    
+    public void TakeHighDamage(int damage)
+    {
+        enemyHp -= damage;
+        if(CameraManager.instance.CanShake)
+        {
+            CameraManager.instance.StrongCameraShake(impulseSource); 
+        }
+        if (enemyHp <= 0)
+        {
+            enemyHp = 0;
+            isDead = true;
+            gameObject.SetActive(false);
+            Debug.Log("Enemy died!");
+        }
+        else
+        {
+            StartCoroutine(DamageEffect());
+        }
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        spriteRenderer.color = flashColor;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = normalColor;
+    }
+
     #endregion
 
     public void Respawn()

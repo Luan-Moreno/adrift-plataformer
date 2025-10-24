@@ -110,6 +110,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             else if (quantity == 1)
             {
                 isUsable = inventoryManager.UseItem(itemName);
+
                 if(isUsable)
                 {
                     RemoveItem();

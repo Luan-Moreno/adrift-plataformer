@@ -78,7 +78,7 @@ public class Door : MonoBehaviour, IDataPersistence
         data.doors.TryGetValue(UniqueId, out isOpen);
         if (isOpen)
         {
-            Debug.Log($"Estado da porta {UniqueId} salvo!");
+            //Debug.Log($"Estado da porta {UniqueId} salvo!");
             gameObject.SetActive(false);
         }
     }

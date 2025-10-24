@@ -19,7 +19,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     private PlayerAnim playerAnim;
     private Animator anim;
     private UIManager uiM;
-    private GameManager gameManager;
 
     public bool IsResting { get => isResting; set => isResting = value; }
     #endregion
@@ -31,7 +30,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         playerAnim = FindAnyObjectByType<PlayerAnim>();
         anim = playerAnim.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
-        gameManager = FindAnyObjectByType<GameManager>();
         enemyObjects = FindAllEnemies();
     }
     void Update()
