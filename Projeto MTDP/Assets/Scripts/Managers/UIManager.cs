@@ -5,6 +5,20 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    #region Singleton
+    public static UIManager instance { get; private set; }
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Debug.LogError("Found more than one UI Manager in the scene!");
+        }
+
+        instance = this;
+    }
+    #endregion
+    
     #region Variables
     public GameObject settings;
     [SerializeField] private bool settingsState = false;
@@ -23,6 +37,7 @@ public class UIManager : MonoBehaviour
     private PlayerAnim playerAnim;
     private Animator anim;
     private SequenceManager sequenceManager;
+    private DialogueManager dialogueManager;
     private InventoryManager inventoryManager;
 
     public bool PauseState { get => pauseState; set => pauseState = value; }
@@ -36,6 +51,7 @@ public class UIManager : MonoBehaviour
         playerMovement = FindAnyObjectByType<PlayerMovement>();
         anim = playerAnim.GetComponent<Animator>();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
+        dialogueManager = FindAnyObjectByType<DialogueManager>();
         inventoryManager = FindAnyObjectByType<InventoryManager>();
         fadePanel = fade.transform.Find("FadePanel").GetComponent<Image>();
         fade.SetActive(false);
@@ -51,14 +67,18 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy && !inventory.activeInHierarchy)
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy 
+        && !inventory.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy)
         {
+            bool initialPauseState = PauseState;
             PauseState = !PauseState;
             pauseMenu.SetActive(PauseState);
             Time.timeScale = PauseState ? 0f : 1f;
+            PauseState = initialPauseState;
         }
 
-        if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy && !pauseMenu.activeInHierarchy)
+        if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy 
+        && !pauseMenu.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy)
         {
             PauseState = !PauseState;
             inventory.SetActive(PauseState);
@@ -107,7 +127,7 @@ public class UIManager : MonoBehaviour
         Application.Quit();
     }
 
-    public IEnumerator Fade(float startAlpha, float endAlpha)
+    public IEnumerator Fade(float startAlpha, float endAlpha, float fadeDuration = 1f)
     {
         float time = 0;
         Color color = fadePanel.color;

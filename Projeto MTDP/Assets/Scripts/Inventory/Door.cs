@@ -31,7 +31,7 @@ public class Door : MonoBehaviour, IDataPersistence
     {
         isOpen = true;
         gameObject.SetActive(false);
-        Debug.Log($"Porta {UniqueId} aberta!");
+        //Debug.Log($"Porta {UniqueId} aberta!");
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

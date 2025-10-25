@@ -36,7 +36,6 @@ public class MenuUIManager : MonoBehaviour
 
     public void CloseGame()
     {
-        Debug.Log("Jogo Fechado");
         Application.Quit();
     }
 

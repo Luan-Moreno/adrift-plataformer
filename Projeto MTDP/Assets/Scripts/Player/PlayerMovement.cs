@@ -99,6 +99,10 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
                 rig.linearVelocity = new Vector2(rig.linearVelocity.x, jumpForce);
             }
         }
+        else
+        {
+            rig.linearVelocity = new Vector2(0f, 0f);
+        }
     }
 
     #region Movement

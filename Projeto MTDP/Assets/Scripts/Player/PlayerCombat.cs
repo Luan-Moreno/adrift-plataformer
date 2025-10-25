@@ -168,10 +168,10 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     public void TakeDamage(int damage)
     {
-        if (isImmortal || IsDead) return;
+        if (isImmortal || IsDead || UIManager.instance.PauseState) return;
 
         currentHp -= damage;
-        if (currentHp < 0)
+        if (currentHp <= 0)
         {
             currentHp = 0;
             uiM.fade.SetActive(false);
@@ -280,12 +280,11 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     public void OnAttack()
     {
         hit = Physics2D.OverlapCircle(currentAttackPoint.position, radius, enemyLayer);
-
-        if (hit != null)
+        if (hit != null && !UIManager.instance.PauseState)
         {
-            if (hit.GetComponent<HazardBehaviour>())
+            if (hit.CompareTag("Hazard"))
             {
-                HandleAttackCollision(hit.GetComponent<HazardBehaviour>());
+                HandleAttackCollision(hit.GetComponentInChildren<HazardBehaviour>());
                 StartCoroutine(HitPause());
             }
 
@@ -339,7 +338,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
     private void HandleAttackMovement()
     {
-        if (collided)
+        if (collided && !UIManager.instance.PauseState)
         {
             if (downwardStrike)
             {

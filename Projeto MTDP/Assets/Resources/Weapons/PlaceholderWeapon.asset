@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3909e014e0a5f2d448b1378b49258a61, type: 3}
   m_Name: PlaceholderWeapon
   m_EditorClassIdentifier: 
-  displayName: Placeholder
+  displayName: Cimitarra
   itemSprite: {fileID: 3591913627282589472, guid: e4c942d2cac570144a490048526b9a04, type: 3}
   itemDescription: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
     malesuada facilisis finibus.

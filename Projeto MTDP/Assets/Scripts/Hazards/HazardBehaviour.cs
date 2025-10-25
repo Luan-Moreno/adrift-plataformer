@@ -3,19 +3,27 @@ using System.Collections;
 
 public class HazardBehaviour : MonoBehaviour
 {
+    [SerializeField] private Transform respawnPoint;
     [SerializeField] private bool damageable = true;
+    [SerializeField] private bool causesRespawn = true;
+    [SerializeField] private int damageAmount = 1;
     [SerializeField] private int healthAmount = 100;
     [SerializeField] private float invulnerabilityTime = 0.2f;
     public bool giveUpwardForce = true;
     private bool hit;
     private int currentHealth;
-
     private PlayerCombat playerCombat;
+    private PlayerMovement playerMovement;
+    private GameObject player;
+    private UIManager uiM;
 
     void Start()
     {
         currentHealth = healthAmount;
         playerCombat = FindAnyObjectByType<PlayerCombat>();
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
+        player = playerCombat.gameObject;
+        uiM = FindAnyObjectByType<UIManager>();
     }
 
     public void Damage(int amount)
@@ -35,10 +43,44 @@ public class HazardBehaviour : MonoBehaviour
             }
         }
     }
-    
+
     IEnumerator TurnOffHit()
     {
         yield return new WaitForSeconds(invulnerabilityTime);
         hit = false;
+    }
+
+    IEnumerator Hit()
+    {
+        playerCombat.TakeDamage(damageAmount);
+        yield return new WaitForSeconds(invulnerabilityTime);
+    }
+
+    IEnumerator Respawn()
+    {
+        playerCombat.IsImmortal = true;
+        playerMovement.Speed = 0;
+        uiM.fade.SetActive(true);
+        yield return StartCoroutine(uiM.Fade(0, 1, 0.65f));
+        yield return new WaitForSeconds(0.1f);
+        player.transform.position = SequenceManager.instance.spawnPoint;
+        yield return new WaitForSeconds(0.1f);
+        yield return StartCoroutine(uiM.Fade(1, 0, 0.65f));
+        uiM.fade.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        playerMovement.Speed = playerMovement.InitialSpeed;
+        playerCombat.IsImmortal = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(Hit());
+            if (causesRespawn)
+            {
+                StartCoroutine(Respawn());
+            }
+        }
     }
 }

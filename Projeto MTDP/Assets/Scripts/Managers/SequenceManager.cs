@@ -1,17 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SequenceManager : MonoBehaviour, IDataPersistence
 {
+    #region Singleton
+    public static SequenceManager instance { get; private set; }
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Debug.LogError("Found more than one Sequence Manager in the scene!");
+        }
+
+        instance = this;
+    }
+    #endregion
+
     #region Variables
     private bool isResting = false;
     private bool canRest = true;
     [SerializeField] private AudioClip bonfireTheme;
     [SerializeField][Range(0f, 1f)] private float bonfireVolume = 0.5f;
     private Vector3 bonfireLocation = Vector3.zero;
+    public Vector3 spawnPoint;
     IEnumerable<EnemyCombat> enemyObjects;
 
     private PlayerCombat playerCombat;
@@ -19,6 +35,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     private PlayerAnim playerAnim;
     private Animator anim;
     private UIManager uiM;
+    
 
     public bool IsResting { get => isResting; set => isResting = value; }
     #endregion
@@ -31,10 +48,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         anim = playerAnim.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         enemyObjects = FindAllEnemies();
-    }
-    void Update()
-    {
-
     }
 
     public IEnumerator RestSequence()
@@ -63,9 +76,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
 
             playerCombat.transform.eulerAngles = new Vector3(0f, 180f, 0f);
             anim.SetBool("isResting", true);
-
-            // Salvar
-            //gameManager.SaveGame();
 
             yield return new WaitForSeconds(0.5f);
             
@@ -97,7 +107,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             playerCombat.IsImmortal = false;
         }
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
         canRest = true;
     }
 
@@ -105,14 +115,14 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     {
         if (bonfireLocation != Vector3.zero)
         {
-            data.playerPosition = bonfireLocation;
             data.firstBonfire = true;
+            data.playerPosition = bonfireLocation;
         }
     }
 
     public void LoadData(GameData data)
     {
-        //this.transform.position = data.playerPosition;
+        spawnPoint = data.playerPosition;
     }
     
     private List<EnemyCombat> FindAllEnemies()

@@ -11,6 +11,7 @@ TagManager:
   - Weapon
   - Door
   - Key
+  - Hazard
   layers:
   - Default
   - TransparentFX

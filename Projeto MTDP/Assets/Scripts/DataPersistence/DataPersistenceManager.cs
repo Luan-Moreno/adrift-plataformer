@@ -46,7 +46,7 @@ public class DataPersistenceManager : MonoBehaviour
         this.gameData = dataHandler.Load();
         if (this.gameData == null)
         {
-            Debug.Log("No data was found, initializing defaults");
+            Debug.Log("No save data was found, initializing defaults...");
             NewGame();
         }
         foreach (IDataPersistence obj in dataPersistenceObjects)

@@ -77,7 +77,6 @@ public class EnemyCombat : MonoBehaviour
             enemyHp = 0;
             isDead = true;
             gameObject.SetActive(false);
-            Debug.Log("Enemy died!");
         }
         else
         {
@@ -97,7 +96,6 @@ public class EnemyCombat : MonoBehaviour
             enemyHp = 0;
             isDead = true;
             gameObject.SetActive(false);
-            Debug.Log("Enemy died!");
         }
         else
         {

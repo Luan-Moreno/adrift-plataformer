@@ -15,7 +15,7 @@ public class PlayerAnim : MonoBehaviour
 
     void Update()
     {
-        if (playerMovement.IsMoving)
+        if (playerMovement.IsMoving && !UIManager.instance.PauseState)
         {
             if (playerMovement.Speed == playerMovement.InitialSpeed)
             {
