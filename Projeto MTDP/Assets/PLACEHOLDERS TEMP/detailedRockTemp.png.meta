@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ef5ae42d2542511448918a778f2b68cd
+guid: d4bc25607754b9e4daeee67d15a5d6eb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6853316077166303748
-    second: Tree_0
+      213: 5073485586105152547
+    second: rockTemp_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 25
+  spritePixelsToUnits: 140
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -152,23 +152,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tree_0
+      name: detailedRockTemp_0
       rect:
         serializedVersion: 2
-        x: 37
-        y: 0
-        width: 66
-        height: 129
+        x: 0
+        y: 175
+        width: 175
+        height: 175
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 40a98f869aedb1f50800000000000000
-      internalID: 6853316077166303748
+      spriteID: 533adadd3f4eb9748a8c681b16568019
+      internalID: 1701084331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: detailedRockTemp_1
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 175
+        width: 175
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02be5c8ebd3583d4aac406e16a2e9f00
+      internalID: 1879787319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: detailedRockTemp_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 175
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d2f6d5f617bce24385eb76e26179cff
+      internalID: -462170357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: detailedRockTemp_3
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 0
+        width: 175
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f5deb4923c8f2e409de3a444a7842b6
+      internalID: -764698458
       vertices: []
       indices: 
       edges: []
@@ -177,7 +243,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: aa1d8255b99720340bef492199381c01
     internalID: 0
     vertices: []
     indices: 
@@ -187,7 +253,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tree_0: 6853316077166303748
+      detailedRockTemp_0: 1701084331
+      detailedRockTemp_1: 1879787319
+      detailedRockTemp_2: -462170357
+      detailedRockTemp_3: -764698458
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

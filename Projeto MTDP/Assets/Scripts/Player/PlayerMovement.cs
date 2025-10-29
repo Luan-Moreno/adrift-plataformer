@@ -217,12 +217,11 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         else
         {
             IsGrounded = false;
-            if (coyoteCoroutine != null)
-            {
-                StopCoroutine(coyoteCoroutine);
-            }
 
-            coyoteCoroutine = StartCoroutine(CoyoteTime());
+            if(coyoteCoroutine == null)
+            {
+                coyoteCoroutine = StartCoroutine(CoyoteTime());
+            }
         }
     }
 

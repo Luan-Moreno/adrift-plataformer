@@ -12,6 +12,8 @@ TagManager:
   - Door
   - Key
   - Hazard
+  - AIWall
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -23,9 +25,9 @@ TagManager:
   - Player
   - Ground
   - Hazard
-  - 
-  - 
-  - 
+  - AIWall
+  - Item
+  - Breakable
   - 
   - 
   - 

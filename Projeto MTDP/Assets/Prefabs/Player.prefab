@@ -38,6 +38,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6151177747686082231}
+  - {fileID: 388217300663320916}
+  - {fileID: 1417430844975903383}
   - {fileID: 5515704804180405221}
   - {fileID: 8296789536396794402}
   - {fileID: 6675895575760963277}
@@ -335,8 +337,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSpeed: 5
   speed: 10
-  jumpForce: 8
-  coyoteTime: 0.1
+  jumpForce: 8.8
+  coyoteTime: 0.15
   isJumpBuffer: 0
   dashVelocity: 8
   dashDuration: 0.3
@@ -369,20 +371,26 @@ MonoBehaviour:
   currentHp: 0
   maxHp: 10
   isImmortal: 0
+  invulnerableTime: 1
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
   isDead: 0
   nearBonfire: 0
   isStrongAttack: 0
-  attackPoint: {fileID: 6151177747686082231}
-  radius: 0.52
+  radius: 0.6
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 8
-  attackCooldown: 0.5
+    m_Bits: 520
+  attackCooldown: 0.25
   strongAttackHoldTime: 1
+  currentAttackPoint: {fileID: 6151177747686082231}
+  attackPointForward: {fileID: 6151177747686082231}
+  attackPointUp: {fileID: 1417430844975903383}
+  attackPointDown: {fileID: 388217300663320916}
   meleeAttack: 0
-  defaultForce: 300
-  upwardsForce: 600
-  movementTime: 0.1
+  defaultForce: 30
+  upwardsForce: 3
+  movementTime: 0.15
 --- !u!1 &1713041516238843614
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,6 +422,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3185308593451143029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2408495854585951766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1417430844975903383}
+  m_Layer: 0
+  m_Name: AttackColliderUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1417430844975903383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408495854585951766}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.063, y: 0.501, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3185308593451143029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4542541392645411745
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,12 +463,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6151177747686082231}
   m_Layer: 0
-  m_Name: AttackCollider
+  m_Name: AttackColliderForward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6151177747686082231
 Transform:
   m_ObjectHideFlags: 0
@@ -440,6 +479,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.449, y: -0.103, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3185308593451143029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5112515991238607433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 388217300663320916}
+  m_Layer: 0
+  m_Name: AttackColliderDown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &388217300663320916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5112515991238607433}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.063, y: -0.585, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -456,6 +526,7 @@ GameObject:
   - component: {fileID: 6675895575760963277}
   - component: {fileID: 5268226372382812940}
   - component: {fileID: 4805523730163933994}
+  - component: {fileID: 4342000911470807882}
   m_Layer: 0
   m_Name: MeleeWeapon
   m_TagString: Untagged
@@ -555,6 +626,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4342000911470807882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5960704127457260164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2beb8d244e380ba45bc559c162dabb2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6111165105176017348
 GameObject:
   m_ObjectHideFlags: 0

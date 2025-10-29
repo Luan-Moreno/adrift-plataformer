@@ -6,7 +6,6 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     #region Variables
     private PlayerMovement playerMovement;
     private Animator anim;
-    private Animator meleeAnim;
     private UIManager uiM;
     private SequenceManager sequenceManager;
     private Collider2D hit;
@@ -71,7 +70,6 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         rig = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
-        meleeAnim = FindAnyObjectByType<MeleeWeapon>().gameObject.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
         Bonfire = gameObject;
@@ -292,6 +290,13 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
             {
                 playerDamage = IsStrongAttack ? 2 : 1;
                 GiveDamage(hit.gameObject, playerDamage);
+                StartCoroutine(HitPause());
+            }
+
+            BreakableWall wall = hit.GetComponent<BreakableWall>();
+            if (wall != null)
+            {
+                wall.TakeHit();
                 StartCoroutine(HitPause());
             }
         }
