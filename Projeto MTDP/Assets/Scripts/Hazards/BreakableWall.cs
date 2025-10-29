@@ -10,8 +10,12 @@ public class BreakableWall : MonoBehaviour
     public ParticleSystem hitParticles;
     private int currentHits = 0;
     private Vector3 originalPosition;
+    public GameObject roomForeground;
     public GameObject room;
+    public GameObject roomBackground;
+    private SecretRoom secretRoomForeground;
     private SecretRoom secretRoom;
+    private SecretRoom secretRoomBackground;
 
     void Awake()
     {
@@ -20,7 +24,9 @@ public class BreakableWall : MonoBehaviour
 
     void Start()
     {
+        secretRoomForeground = roomForeground.GetComponent<SecretRoom>();
         secretRoom = room.GetComponent<SecretRoom>();
+        secretRoomBackground = roomBackground.GetComponent<SecretRoom>();
     }
     
     public void TakeHit()
@@ -37,7 +43,9 @@ public class BreakableWall : MonoBehaviour
 
         if (currentHits >= hitsToBreak)
         {
+            secretRoomForeground.RevealRoom();
             secretRoom.RevealRoom();
+            secretRoomBackground.RevealRoom();
             Destroy(gameObject);
         }
             

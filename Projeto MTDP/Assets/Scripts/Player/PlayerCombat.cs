@@ -44,6 +44,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     private float chargeStartTime;
     private float lastAttackTime;
     [SerializeField] private bool meleeAttack;
+    [SerializeField] private bool isRespawning;
     
     //
     public float defaultForce = 30;
@@ -62,7 +63,8 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     public int MaxHp { get => maxHp; set => maxHp = value; }
     public int CurrentHp { get => currentHp; set => currentHp = value; }
     public GameObject Bonfire { get => bonfire; set => bonfire = value; }
-    
+    public bool IsRespawning { get => isRespawning; set => isRespawning = value; }
+
 
     #endregion
     void Start()
@@ -261,8 +263,8 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     {
         if (collider.gameObject.CompareTag("Bonfire"))
         {
-            Bonfire = collider.gameObject;
             nearBonfire = true;
+            Bonfire = collider.gameObject;
         }
     }
 

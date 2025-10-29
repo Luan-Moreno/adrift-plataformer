@@ -13627,8 +13627,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 485941777}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 5
+        m_MethodName: ReloadScene
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

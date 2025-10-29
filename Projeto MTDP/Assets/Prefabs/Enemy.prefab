@@ -421,7 +421,7 @@ MonoBehaviour:
   rotationTime: 0.8
   layer:
     serializedVersion: 2
-    m_Bits: 584
+    m_Bits: 1864
 --- !u!114 &6136870273471513839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,8 +457,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b91ffbc7b0f04b4bb3a3cd2600a6e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnPoint: {fileID: 0}
   damageable: 0
   causesRespawn: 0
+  damageAmount: 1
   healthAmount: 100
   invulnerabilityTime: 0.2
   giveUpwardForce: 1

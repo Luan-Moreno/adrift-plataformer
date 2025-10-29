@@ -51,12 +51,13 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsFacingRight { get => isFacingRight; set => isFacingRight = value; }
     public bool IsFacingLeft { get => isFacingLeft; set => isFacingLeft = value; }
+    public Rigidbody2D Rig { get => rig; set => rig = value; }
 
     #endregion
 
     void Start()
     {
-        rig = GetComponent<Rigidbody2D>();
+        Rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         playerCombat = GetComponent<PlayerCombat>();
@@ -89,19 +90,19 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         {
             if (!isDashing)
             {
-                rig.linearVelocity = new Vector2(direction.x * Speed, rig.linearVelocity.y);
+                Rig.linearVelocity = new Vector2(direction.x * Speed, Rig.linearVelocity.y);
             }
             if (isJumping && isCoyoteGrounded)
             {
                 isJumping = false;
                 IsGrounded = false;
                 isCoyoteGrounded = false;
-                rig.linearVelocity = new Vector2(rig.linearVelocity.x, jumpForce);
+                Rig.linearVelocity = new Vector2(Rig.linearVelocity.x, jumpForce);
             }
         }
         else
         {
-            rig.linearVelocity = new Vector2(0f, 0f);
+            Rig.linearVelocity = new Vector2(0f, 0f);
         }
     }
 
@@ -145,9 +146,9 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             isJumpBuffer = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) && rig.linearVelocity.y > 0)
+        if (Input.GetKeyUp(KeyCode.Space) && Rig.linearVelocity.y > 0)
         {
-            rig.linearVelocity = new Vector2(rig.linearVelocity.x, 0f);
+            Rig.linearVelocity = new Vector2(Rig.linearVelocity.x, 0f);
         }
     }
 
@@ -173,7 +174,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             dashDirection = dashDirection.normalized;
             dashDirection.x *= 0.9f;
             dashDirection.y *= 0.75f;
-            rig.linearVelocity = dashDirection * dashVelocity;
+            Rig.linearVelocity = dashDirection * dashVelocity;
         }
 
         if (IsGrounded && !isDashing)

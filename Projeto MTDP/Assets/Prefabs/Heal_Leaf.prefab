@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9006845685156932328}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Heal_Leaf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2138888488445488667}
   - component: {fileID: 4034015712291715639}
   - component: {fileID: 5317839169217896347}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sprite
   m_TagString: Healing
   m_Icon: {fileID: 0}
