@@ -48,7 +48,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     
     //
     public float defaultForce = 30;
-    public float upwardsForce = 60;
+    public float upwardsForce = 5;
     public float movementTime = 0.1f;
     private Vector2 direction;
     private bool collided;

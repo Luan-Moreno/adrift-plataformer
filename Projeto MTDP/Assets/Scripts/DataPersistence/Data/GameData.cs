@@ -10,6 +10,7 @@ public class GameData
     public Vector3 playerPosition;
     public Vector3 firstSpawnpoint = new(-39.8f, -3.26f, 0f);
     public bool firstBonfire;
+    public string lastSceneName;
     public SerializableDictionary<string, bool> collectables;
     public SerializableDictionary<string, bool> doors;
     public List<string> itemNames;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Android.Gradle.Manifest;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SequenceManager : MonoBehaviour, IDataPersistence
@@ -28,6 +29,9 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     [SerializeField][Range(0f, 1f)] private float bonfireVolume = 0.5f;
     private Vector3 bonfireLocation = Vector3.zero;
     public Vector3 spawnPoint;
+    private string currentScene;
+    private GameObject firstSpawnObj;
+    private Vector3 sceneFirstSpawn;
     IEnumerable<EnemyCombat> enemyObjects;
 
     private PlayerCombat playerCombat;
@@ -48,6 +52,11 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         anim = playerAnim.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         enemyObjects = FindAllEnemies();
+
+        if (spawnPoint != Vector3.zero && playerCombat != null)
+        {
+            playerCombat.transform.position = spawnPoint;
+        }
     }
 
     public IEnumerator RestSequence()
@@ -117,12 +126,69 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         {
             data.firstBonfire = true;
             data.playerPosition = bonfireLocation;
+            data.lastSceneName = SceneManager.GetActiveScene().name;
         }
     }
 
     public void LoadData(GameData data)
     {
-        spawnPoint = data.playerPosition;
+        currentScene = SceneManager.GetActiveScene().name;
+
+        firstSpawnObj = GameObject.FindGameObjectWithTag("FirstSpawn");
+
+        if (firstSpawnObj != null)
+        {
+            sceneFirstSpawn = firstSpawnObj.transform.position;
+        }
+        else
+        {
+            Debug.LogWarning("Spawnpoint padrão não encontrado!");
+        }
+
+        if (data.lastSceneName == currentScene && data.firstBonfire)
+        {
+            Transform nearestBonfire = FindClosestBonfire(data.playerPosition);
+            if (nearestBonfire != null && Vector3.Distance(nearestBonfire.position, data.playerPosition) < 5f)
+            {
+                spawnPoint = data.playerPosition;
+            }
+            else
+            {
+                Debug.LogWarning("Bonfire não encontrada, resetando spawnpoint padrão.");
+                spawnPoint = sceneFirstSpawn;
+                data.firstBonfire = false;
+            }
+        }
+        else
+        {
+            spawnPoint = sceneFirstSpawn;
+        }
+    }
+    
+    public void PositionPlayerAtSpawn()
+    {
+        if (playerCombat != null)
+        {
+            playerCombat.transform.position = spawnPoint;
+            Debug.Log($"Player posicionado em {spawnPoint}");
+        }
+    }
+
+    private Transform FindClosestBonfire(Vector3 position)
+    {
+        GameObject[] bonfires = GameObject.FindGameObjectsWithTag("Bonfire");
+
+        if (bonfires.Length == 0)
+        {
+            return null;
+        }
+
+        GameObject nearest = bonfires.OrderBy(bonfire => Vector3.Distance(bonfire.transform.position, position)).FirstOrDefault();
+        if (nearest != null)
+        {
+            return nearest.transform;
+        }
+        return null;
     }
     
     private List<EnemyCombat> FindAllEnemies()

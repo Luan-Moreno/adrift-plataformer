@@ -53,6 +53,7 @@ public class DataPersistenceManager : MonoBehaviour
         {
             obj.LoadData(gameData);
         }
+        SequenceManager.instance.PositionPlayerAtSpawn();
     }
 
     private void OnApplicationQuit()
@@ -65,4 +66,15 @@ public class DataPersistenceManager : MonoBehaviour
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IDataPersistence>();
         return new List<IDataPersistence>(dataPersistenceObjects);
     }
+
+    #if UNITY_EDITOR
+    [ContextMenu("Reset Save Data")]
+    public void ResetSaveData()
+    {
+        NewGame();
+        SaveGame();
+        Debug.Log("Save reset to defaults");
+    }
+    #endif
+
 }
