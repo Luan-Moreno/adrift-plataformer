@@ -11,6 +11,7 @@ public class GameData
     public Vector3 firstSpawnpoint = new(-39.8f, -3.26f, 0f);
     public bool firstBonfire;
     public string lastSceneName;
+    public SerializableDictionary<string, bool> visitedScenes;
     public SerializableDictionary<string, bool> collectables;
     public SerializableDictionary<string, bool> doors;
     public List<string> itemNames;
@@ -20,10 +21,11 @@ public class GameData
     //Construtor com valores default para novo jogo
     public GameData()
     {
-        this.maxHp = 10;
-        this.playerDamage = 1;
-        this.firstBonfire = false;
+        maxHp = 10;
+        playerDamage = 1;
+        firstBonfire = false;
         playerPosition = firstSpawnpoint;
+        visitedScenes = new SerializableDictionary<string, bool>();
         collectables = new SerializableDictionary<string, bool>();
         doors = new SerializableDictionary<string, bool>();
         itemNames = new();

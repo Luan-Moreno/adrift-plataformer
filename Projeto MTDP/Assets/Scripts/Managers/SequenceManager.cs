@@ -1,26 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SequenceManager : MonoBehaviour, IDataPersistence
 {
-    #region Singleton
-    public static SequenceManager instance { get; private set; }
+    public static string lastUsedPortalID = null;
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Debug.LogError("Found more than one Sequence Manager in the scene!");
-        }
-
-        instance = this;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    #endregion
 
     #region Variables
     private bool isResting = false;
@@ -28,10 +20,13 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     [SerializeField] private AudioClip bonfireTheme;
     [SerializeField][Range(0f, 1f)] private float bonfireVolume = 0.5f;
     private Vector3 bonfireLocation = Vector3.zero;
-    public Vector3 spawnPoint;
+    public Vector3 spawnPoint = Vector3.zero;
     private string currentScene;
+    private bool visitedBefore;
     private GameObject firstSpawnObj;
     private Vector3 sceneFirstSpawn;
+    private GameObject lastSpawnObj;
+    private Vector3 sceneLastSpawn;
     IEnumerable<EnemyCombat> enemyObjects;
 
     private PlayerCombat playerCombat;
@@ -39,18 +34,11 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     private PlayerAnim playerAnim;
     private Animator anim;
     private UIManager uiM;
-    
-
     public bool IsResting { get => isResting; set => isResting = value; }
     #endregion
 
     void Start()
     {
-        playerCombat = FindAnyObjectByType<PlayerCombat>();
-        playerMovement = FindAnyObjectByType<PlayerMovement>();
-        playerAnim = FindAnyObjectByType<PlayerAnim>();
-        anim = playerAnim.GetComponent<Animator>();
-        uiM = FindAnyObjectByType<UIManager>();
         enemyObjects = FindAllEnemies();
 
         if (spawnPoint != Vector3.zero && playerCombat != null)
@@ -59,10 +47,10 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    #region Rest Sequence
     public IEnumerator RestSequence()
     {
         if (!canRest) yield break;
-
         canRest = false;
 
         if (!IsResting)
@@ -71,7 +59,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             playerCombat.IsImmortal = true;
             playerMovement.Speed = 0f;
             playerCombat.ReceiveHealing(playerCombat.MaxHp);
-            //playerCombat.RechargeItems();
             uiM.fade.SetActive(true);
             yield return StartCoroutine(uiM.Fade(0, 1));
 
@@ -87,7 +74,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             anim.SetBool("isResting", true);
 
             yield return new WaitForSeconds(0.5f);
-            
             yield return StartCoroutine(uiM.Fade(1, 0));
             uiM.fade.SetActive(false);
 
@@ -98,8 +84,12 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         {
             foreach (EnemyCombat enemy in enemyObjects)
             {
-                enemy.Respawn();
+                if (enemy != null)
+                {
+                    enemy.Respawn();
+                }
             }
+
             uiM.fade.SetActive(true);
             yield return StartCoroutine(uiM.Fade(0, 1));
 
@@ -119,7 +109,62 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         yield return new WaitForSeconds(1f);
         canRest = true;
     }
+    #endregion
 
+    #region OnSceneLoad/Destroy
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        playerCombat = FindAnyObjectByType<PlayerCombat>();
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
+        playerAnim = FindAnyObjectByType<PlayerAnim>();
+        anim = playerAnim.GetComponent<Animator>();
+        uiM = FindAnyObjectByType<UIManager>();
+
+        // 🔹 Procura spawnpoints padrão
+        firstSpawnObj = GameObject.FindGameObjectWithTag("FirstSpawn");
+        lastSpawnObj = GameObject.FindGameObjectWithTag("LastSpawn");
+        if (firstSpawnObj != null) sceneFirstSpawn = firstSpawnObj.transform.position;
+        if (lastSpawnObj != null) sceneLastSpawn = lastSpawnObj.transform.position;
+
+        // 🔹 Posiciona o player corretamente
+        PositionPlayerAtSpawn();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    #endregion
+
+    #region Player Spawn
+    public void PositionPlayerAtSpawn()
+    {
+        if (playerCombat == null) return;
+
+        // Caso tenha vindo de um portal
+        if (!string.IsNullOrEmpty(lastUsedPortalID))
+        {
+            var portals = FindObjectsByType<ScenePortal>(FindObjectsSortMode.None);
+            ScenePortal destination = portals.FirstOrDefault(p => p.portalID == lastUsedPortalID);
+
+            if (destination != null)
+            {
+                playerCombat.transform.position = destination.transform.position;
+                StartCoroutine(destination.WaitTeleport());
+                Debug.Log($"Player spawnado na saída '{lastUsedPortalID}' em {destination.transform.position}");
+                lastUsedPortalID = null;
+                return;
+            }
+        }
+
+        // Caso normal (primeira vez ou sem portal)
+        Vector3 finalPosition = spawnPoint != Vector3.zero ? spawnPoint : sceneFirstSpawn;
+        playerCombat.transform.position = finalPosition;
+        Debug.Log($"Player posicionado em {finalPosition}");
+    }
+    #endregion
+
+    #region Save/Load
     public void SaveData(ref GameData data)
     {
         if (bonfireLocation != Vector3.zero)
@@ -128,22 +173,27 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             data.playerPosition = bonfireLocation;
             data.lastSceneName = SceneManager.GetActiveScene().name;
         }
+
+        currentScene = SceneManager.GetActiveScene().name;
+        if (!data.visitedScenes.ContainsKey(currentScene))
+        {
+            data.visitedScenes[currentScene] = true;
+        }
     }
 
     public void LoadData(GameData data)
     {
         currentScene = SceneManager.GetActiveScene().name;
-
         firstSpawnObj = GameObject.FindGameObjectWithTag("FirstSpawn");
+        lastSpawnObj = GameObject.FindGameObjectWithTag("LastSpawn");
 
         if (firstSpawnObj != null)
-        {
             sceneFirstSpawn = firstSpawnObj.transform.position;
-        }
-        else
-        {
-            Debug.LogWarning("Spawnpoint padrão não encontrado!");
-        }
+        if (lastSpawnObj != null)
+            sceneLastSpawn = lastSpawnObj.transform.position;
+
+        visitedBefore = data.visitedScenes.ContainsKey(currentScene) && data.visitedScenes[currentScene];
+        spawnPoint = visitedBefore ? sceneLastSpawn : sceneFirstSpawn;
 
         if (data.lastSceneName == currentScene && data.firstBonfire)
         {
@@ -154,46 +204,29 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             }
             else
             {
-                Debug.LogWarning("Bonfire não encontrada, resetando spawnpoint padrão.");
                 spawnPoint = sceneFirstSpawn;
                 data.firstBonfire = false;
             }
         }
-        else
-        {
-            spawnPoint = sceneFirstSpawn;
-        }
     }
-    
-    public void PositionPlayerAtSpawn()
-    {
-        if (playerCombat != null)
-        {
-            playerCombat.transform.position = spawnPoint;
-            Debug.Log($"Player posicionado em {spawnPoint}");
-        }
-    }
+    #endregion
 
+    #region Auxiliar
     private Transform FindClosestBonfire(Vector3 position)
     {
         GameObject[] bonfires = GameObject.FindGameObjectsWithTag("Bonfire");
+        if (bonfires.Length == 0) return null;
 
-        if (bonfires.Length == 0)
-        {
-            return null;
-        }
-
-        GameObject nearest = bonfires.OrderBy(bonfire => Vector3.Distance(bonfire.transform.position, position)).FirstOrDefault();
-        if (nearest != null)
-        {
-            return nearest.transform;
-        }
-        return null;
+        return bonfires
+            .OrderBy(b => Vector3.Distance(b.transform.position, position))
+            .FirstOrDefault()?.transform;
     }
-    
+
     private List<EnemyCombat> FindAllEnemies()
     {
-        IEnumerable<EnemyCombat> enemyObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<EnemyCombat>();
-        return new List<EnemyCombat>(enemyObjects);
+        return FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+            .OfType<EnemyCombat>()
+            .ToList();
     }
+    #endregion
 }

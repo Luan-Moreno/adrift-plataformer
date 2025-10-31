@@ -54,7 +54,6 @@ public class UIManager : MonoBehaviour
         dialogueManager = FindAnyObjectByType<DialogueManager>();
         inventoryManager = FindAnyObjectByType<InventoryManager>();
         fadePanel = fade.transform.Find("FadePanel").GetComponent<Image>();
-        fade.SetActive(false);
 
 
         if (settings != null)

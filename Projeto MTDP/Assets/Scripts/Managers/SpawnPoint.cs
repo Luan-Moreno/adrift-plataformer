@@ -4,11 +4,18 @@ using Unity.VisualScripting;
 
 public class SpawnPoint : MonoBehaviour
 {
+    private SequenceManager sequenceManager;
+
+    void Start()
+    {
+        sequenceManager = FindAnyObjectByType<SequenceManager>();
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            SequenceManager.instance.spawnPoint = transform.position;
+            sequenceManager.spawnPoint = transform.position;
         }
     }
 }

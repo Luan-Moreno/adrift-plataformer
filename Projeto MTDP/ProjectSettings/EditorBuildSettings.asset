@@ -9,8 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: a585b3be3006c24429eef42beedfede5
   - enabled: 1
-    path: Assets/Scenes/InitialScene/InitialScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/A Praia/AP01.unity
+    guid: c1830c72cdd4f3c4b9a75774839c1103
+  - enabled: 1
+    path: Assets/Scenes/A Praia/AP02.unity
+    guid: 79a2b9aae42f442478dda4068491e1b6
+  - enabled: 1
+    path: Assets/Scenes/A Praia/AP03.unity
+    guid: a1140797bd116d34881ec0022a153f6e
+  - enabled: 1
+    path: Assets/Scenes/A Praia/AP04.unity
+    guid: f6189eeac9499b847bb7ebb74ec0fe84
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

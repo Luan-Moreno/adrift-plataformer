@@ -17,6 +17,7 @@ public class HazardBehaviour : MonoBehaviour
     private PlayerMovement playerMovement;
     private GameObject player;
     private UIManager uiM;
+    private SequenceManager sequenceManager;
 
     void Start()
     {
@@ -25,6 +26,7 @@ public class HazardBehaviour : MonoBehaviour
         playerMovement = FindAnyObjectByType<PlayerMovement>();
         player = playerCombat.gameObject;
         uiM = FindAnyObjectByType<UIManager>();
+        sequenceManager = FindAnyObjectByType<SequenceManager>();
     }
 
     public void Damage(int amount)
@@ -71,7 +73,7 @@ public class HazardBehaviour : MonoBehaviour
         uiM.fade.SetActive(true);
         yield return StartCoroutine(uiM.Fade(0, 1, 0.65f));
         yield return new WaitForSeconds(0.1f);
-        player.transform.position = SequenceManager.instance.spawnPoint;
+        player.transform.position = sequenceManager.spawnPoint;
         playerMovement.Rig.linearVelocity = UnityEngine.Vector2.zero;
         yield return new WaitForSeconds(0.1f);
         yield return StartCoroutine(uiM.Fade(1, 0, 0.65f));

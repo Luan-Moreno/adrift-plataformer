@@ -6,6 +6,7 @@ public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
+    private SequenceManager sequenceManager;
     public static DataPersistenceManager instance { get; private set; }
     private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
@@ -24,6 +25,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        sequenceManager = FindAnyObjectByType<SequenceManager>();
         LoadGame();
     }
 
@@ -53,7 +55,7 @@ public class DataPersistenceManager : MonoBehaviour
         {
             obj.LoadData(gameData);
         }
-        SequenceManager.instance.PositionPlayerAtSpawn();
+        sequenceManager.PositionPlayerAtSpawn();
     }
 
     private void OnApplicationQuit()

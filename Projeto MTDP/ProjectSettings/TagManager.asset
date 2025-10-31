@@ -15,6 +15,7 @@ TagManager:
   - AIWall
   - Wall
   - FirstSpawn
+  - Fade
   layers:
   - Default
   - TransparentFX

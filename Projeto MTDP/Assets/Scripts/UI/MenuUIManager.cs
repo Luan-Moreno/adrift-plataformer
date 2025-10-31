@@ -39,7 +39,7 @@ public class MenuUIManager : MonoBehaviour
         Application.Quit();
     }
 
-    public IEnumerator FadeToGame(float startAlpha, float endAlpha, string sceneName = "InitialScene")
+    public IEnumerator FadeToGame(float startAlpha, float endAlpha, string sceneName = "AP01")
     {
         fade.SetActive(true);
         float time = 0;

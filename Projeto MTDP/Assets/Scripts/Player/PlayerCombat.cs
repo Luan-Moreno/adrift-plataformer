@@ -77,6 +77,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         Bonfire = gameObject;
         isColliding = false;
         IsDead = false;
+        uiM.gameOver.SetActive(false);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.material = Instantiate(spriteRenderer.material);

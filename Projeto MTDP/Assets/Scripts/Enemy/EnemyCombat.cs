@@ -21,6 +21,7 @@ public class EnemyCombat : MonoBehaviour
     private EnemyMovement enemyMovement;
     private Collider2D hit;
     private CinemachineImpulseSource impulseSource;
+    private Vector3 initialPosition;
 
     public bool IsDead { get => isDead; set => isDead = value; }
     #endregion
@@ -34,6 +35,7 @@ public class EnemyCombat : MonoBehaviour
         impulseSource = GetComponent<CinemachineImpulseSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         normalColor = spriteRenderer.color;
+        initialPosition = gameObject.transform.position;
     }
 
     void FixedUpdate()
@@ -116,6 +118,7 @@ public class EnemyCombat : MonoBehaviour
     {
         isDead = false;
         enemyHp = maxEnemyHp;
+        gameObject.transform.position = initialPosition;
         gameObject.SetActive(true);
     }
     
