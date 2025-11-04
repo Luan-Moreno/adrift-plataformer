@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,12 +17,14 @@ public class UIManager : MonoBehaviour
         }
 
         instance = this;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     #endregion
     
     #region Variables
     public GameObject settings;
     [SerializeField] private bool settingsState = false;
+    [SerializeField] private List<Image> hearts;
 
     public GameObject pauseMenu;
     public GameObject gameOver;
@@ -55,18 +58,24 @@ public class UIManager : MonoBehaviour
         inventoryManager = FindAnyObjectByType<InventoryManager>();
         fadePanel = fade.transform.Find("FadePanel").GetComponent<Image>();
 
-
         if (settings != null)
         {
             settingsState = false;
             settings.SetActive(settingsState);
         }
+
+        if (gameOver != null) gameOver.SetActive(false);
+        //if (fade != null) fade.SetActive(false);
+        if (pauseMenu != null) pauseMenu.SetActive(false);
+        if (inventory != null) inventory.SetActive(false);
+        if (settings != null) { settingsState = false; settings.SetActive(false);}
+
         Pause();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy 
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy
         && !inventory.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy)
         {
             bool initialPauseState = PauseState;
@@ -76,7 +85,7 @@ public class UIManager : MonoBehaviour
             PauseState = initialPauseState;
         }
 
-        if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy 
+        if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy
         && !pauseMenu.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy)
         {
             PauseState = !PauseState;
@@ -107,9 +116,10 @@ public class UIManager : MonoBehaviour
             DataPersistenceManager.instance.SaveGame();
         }
     }
-    
+
     public void ReloadScene()
     {
+        Time.timeScale = 1f;
         currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
     }
@@ -122,8 +132,32 @@ public class UIManager : MonoBehaviour
 
     public void CloseGame()
     {
-        Debug.Log("Jogo Fechado");
         Application.Quit();
+    }
+
+    public void UpdateHearts()
+    {
+        float maxHp = playerCombat.MaxHp; //10
+        float hpLeft = playerCombat.CurrentHp; //10
+        float perHeart = (float) maxHp / hearts.Count; //2
+        
+        for (int i = 0; i < hearts.Count; i++)
+        {
+            if (hpLeft >= perHeart)
+            {
+                hearts[i].fillAmount = 1f;
+            }
+            else if (hpLeft > 0)
+            {
+                hearts[i].fillAmount = hpLeft / perHeart;
+            }
+            else
+            {
+                hearts[i].fillAmount = 0f;
+            }
+
+            hpLeft -= perHeart;
+        }
     }
 
     public IEnumerator Fade(float startAlpha, float endAlpha, float fadeDuration = 1f)
@@ -142,4 +176,23 @@ public class UIManager : MonoBehaviour
         color.a = endAlpha;
         fadePanel.color = color;
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        //fade.SetActive(false);
+        gameOver.SetActive(false);
+        pauseMenu.SetActive(false);
+        inventory.SetActive(false);
+        if (settings != null)
+        {
+            settingsState = false;
+            settings.SetActive(false);
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }
+

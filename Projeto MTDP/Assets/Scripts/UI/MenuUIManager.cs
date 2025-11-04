@@ -39,6 +39,17 @@ public class MenuUIManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void ReturnToMenu()
+    {
+        foreach (var obj in GameObject.FindGameObjectsWithTag("Persistent"))
+        {
+            Destroy(obj);
+        }
+        
+        SceneManager.LoadScene("MainMenu");
+    }
+
+
     public IEnumerator FadeToGame(float startAlpha, float endAlpha, string sceneName = "AP01")
     {
         fade.SetActive(true);

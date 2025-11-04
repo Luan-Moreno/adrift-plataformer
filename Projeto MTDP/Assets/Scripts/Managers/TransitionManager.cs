@@ -25,6 +25,7 @@ public class TransitionManager : MonoBehaviour
         GameObject fade = GameObject.FindWithTag("Fade");
         if (fade != null)
         {
+            Debug.Log("Achou Fade");
             fadePanel = fade.transform.Find("FadePanel")?.GetComponent<Image>();
         }
     }
@@ -41,6 +42,7 @@ public class TransitionManager : MonoBehaviour
 
         if (fadePanel != null)
         {
+            Debug.Log("Achou FadePanel");
             StartCoroutine(uiM.Fade(1, 0, 0.5f));
         }
     }

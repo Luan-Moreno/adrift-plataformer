@@ -114,19 +114,32 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     #region OnSceneLoad/Destroy
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        spawnPoint = sceneFirstSpawn;
+        Time.timeScale = 1f;
         playerCombat = FindAnyObjectByType<PlayerCombat>();
+        playerCombat.IsCharging = false;
+        if (playerCombat.IsDead)
+        {
+            playerCombat.CurrentHp = playerCombat.MaxHp;
+            playerCombat.IsDead = false;
+            uiM.UpdateHearts();
+        }
+        playerCombat.IsRespawning = false;
+        playerCombat.IsImmortal = false;
         playerMovement = FindAnyObjectByType<PlayerMovement>();
+        playerMovement.Speed = playerMovement.InitialSpeed;
         playerAnim = FindAnyObjectByType<PlayerAnim>();
+
         anim = playerAnim.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
+        uiM.PauseState = false;
+        
 
-        // 🔹 Procura spawnpoints padrão
         firstSpawnObj = GameObject.FindGameObjectWithTag("FirstSpawn");
         lastSpawnObj = GameObject.FindGameObjectWithTag("LastSpawn");
         if (firstSpawnObj != null) sceneFirstSpawn = firstSpawnObj.transform.position;
         if (lastSpawnObj != null) sceneLastSpawn = lastSpawnObj.transform.position;
 
-        // 🔹 Posiciona o player corretamente
         PositionPlayerAtSpawn();
     }
 
@@ -141,7 +154,6 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     {
         if (playerCombat == null) return;
 
-        // Caso tenha vindo de um portal
         if (!string.IsNullOrEmpty(lastUsedPortalID))
         {
             var portals = FindObjectsByType<ScenePortal>(FindObjectsSortMode.None);
@@ -151,16 +163,15 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             {
                 playerCombat.transform.position = destination.transform.position;
                 StartCoroutine(destination.WaitTeleport());
-                Debug.Log($"Player spawnado na saída '{lastUsedPortalID}' em {destination.transform.position}");
+                //Debug.Log($"Player spawnado na saída '{lastUsedPortalID}' em {destination.transform.position}");
                 lastUsedPortalID = null;
                 return;
             }
         }
 
-        // Caso normal (primeira vez ou sem portal)
         Vector3 finalPosition = spawnPoint != Vector3.zero ? spawnPoint : sceneFirstSpawn;
         playerCombat.transform.position = finalPosition;
-        Debug.Log($"Player posicionado em {finalPosition}");
+        //Debug.Log($"Player posicionado em {finalPosition}");
     }
     #endregion
 

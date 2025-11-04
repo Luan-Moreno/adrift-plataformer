@@ -16,6 +16,8 @@ TagManager:
   - Wall
   - FirstSpawn
   - Fade
+  - LastSpawn
+  - Persistent
   layers:
   - Default
   - TransparentFX

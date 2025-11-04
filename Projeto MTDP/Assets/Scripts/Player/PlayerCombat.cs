@@ -130,7 +130,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         if ((meleeAttack && Input.GetAxis("Vertical") == 0) ||
         meleeAttack && Input.GetAxis("Vertical") < 0 && playerMovement.IsGrounded)
         {
-            Debug.Log("Ataque lateral");
+            //Debug.Log("Ataque lateral");
             currentAttackPoint = attackPointForward;
             //anim.SetTrigger("ForwardAttack");
             //meleeAnim.SetTrigger("ForwardAttackSwipe");
@@ -172,6 +172,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         if (isImmortal || IsDead || UIManager.instance.PauseState) return;
 
         currentHp -= damage;
+        uiM.UpdateHearts();
         if (currentHp <= 0)
         {
             currentHp = 0;
@@ -224,6 +225,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     public void ReceiveHealing(int healing)
     {
         currentHp += healing;
+        uiM.UpdateHearts();
         anim.SetTrigger("isHealing");
         if (currentHp > maxHp)
         {

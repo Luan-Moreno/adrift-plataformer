@@ -59,7 +59,6 @@ public class EnemyCombat : MonoBehaviour
     {
         if (hit != null)
         {
-            Debug.Log("Was Attacked! - Received " + damage + " damage!");
             if(!playerCombat.IsImmortal)
             {
                 playerCombat.TakeDamage(damage);
