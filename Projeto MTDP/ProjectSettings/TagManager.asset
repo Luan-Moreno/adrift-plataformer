@@ -18,6 +18,7 @@ TagManager:
   - Fade
   - LastSpawn
   - Persistent
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -32,7 +33,7 @@ TagManager:
   - AIWall
   - Item
   - Breakable
-  - 
+  - NPC
   - 
   - 
   - 

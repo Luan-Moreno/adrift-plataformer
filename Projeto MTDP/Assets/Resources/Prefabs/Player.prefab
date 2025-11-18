@@ -340,6 +340,7 @@ MonoBehaviour:
   jumpForce: 8.8
   coyoteTime: 0.15
   isJumpBuffer: 0
+  fallMultiplier: 1.2
   dashVelocity: 8
   dashDuration: 0.3
   isMoving: 0
@@ -388,8 +389,9 @@ MonoBehaviour:
   attackPointUp: {fileID: 1417430844975903383}
   attackPointDown: {fileID: 388217300663320916}
   meleeAttack: 0
+  isRespawning: 0
   defaultForce: 30
-  upwardsForce: 3
+  upwardsForce: 5
   movementTime: 0.15
 --- !u!1 &1713041516238843614
 GameObject:

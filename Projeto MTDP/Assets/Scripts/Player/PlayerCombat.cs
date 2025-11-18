@@ -46,7 +46,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     [SerializeField] private bool meleeAttack;
     [SerializeField] private bool isRespawning;
     
-    //
+    [Header("Attack Movement")]
     public float defaultForce = 30;
     public float upwardsForce = 5;
     public float movementTime = 0.1f;
@@ -54,7 +54,6 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     private bool collided;
     private bool downwardStrike;
     private Rigidbody2D rig;
-    //
 
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsImmortal { get => isImmortal; set => isImmortal = value; }
@@ -287,12 +286,16 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         {
             if (hit.CompareTag("Hazard"))
             {
+                upwardsForce = 6;
                 HandleAttackCollision(hit.GetComponentInChildren<HazardBehaviour>());
                 StartCoroutine(HitPause());
             }
 
             if (hit.CompareTag("Enemy"))
             {
+                upwardsForce = 3;
+                HandleAttackCollision(hit.GetComponentInChildren<HazardBehaviour>());
+
                 playerDamage = IsStrongAttack ? 2 : 1;
                 GiveDamage(hit.gameObject, playerDamage);
                 StartCoroutine(HitPause());
@@ -342,7 +345,10 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
             }
             collided = true;
         }
-        hazardObj.Damage(playerDamage);
+        if(upwardsForce == 5)
+        {
+            hazardObj.Damage(playerDamage);
+        }
         StartCoroutine(NoLongerColliding());
     }
 

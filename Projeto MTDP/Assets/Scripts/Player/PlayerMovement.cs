@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
     [SerializeField] private float jumpForce;
     [SerializeField] private float coyoteTime;
     [SerializeField] private bool isJumpBuffer;
+    [SerializeField] private float fallMultiplier = 1.2f;
     [SerializeField] private float dashVelocity;
     [SerializeField] private float dashDuration;
     private Vector2 direction;
@@ -98,6 +99,10 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
                 IsGrounded = false;
                 isCoyoteGrounded = false;
                 Rig.linearVelocity = new Vector2(Rig.linearVelocity.x, jumpForce);
+            }
+            if (Rig.linearVelocity.y < 0)
+            {
+                Rig.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
             }
         }
         else
