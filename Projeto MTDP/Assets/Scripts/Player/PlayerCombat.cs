@@ -114,25 +114,22 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         {
             Debug.Log("Ataque pra cima");
             currentAttackPoint = attackPointUp;
-            //anim.SetTrigger("UpwardAttack");
-            //meleeAnim.SetTrigger("UpwardAttackSwipe");
+            anim.SetTrigger("isUpwardAttacking");
         }
 
         if (meleeAttack && Input.GetAxis("Vertical") < 0 && !playerMovement.IsGrounded)
         {
             Debug.Log("Ataque pra baixo");
             currentAttackPoint = attackPointDown;
-            //anim.SetTrigger("DownwardAttack");
-            //meleeAnim.SetTrigger("DownwardAttackSwipe");
+            anim.SetTrigger("isDownwardAttacking");
         }
 
         if ((meleeAttack && Input.GetAxis("Vertical") == 0) ||
         meleeAttack && Input.GetAxis("Vertical") < 0 && playerMovement.IsGrounded)
         {
-            //Debug.Log("Ataque lateral");
+            Debug.Log("Ataque lateral");
             currentAttackPoint = attackPointForward;
-            //anim.SetTrigger("ForwardAttack");
-            //meleeAnim.SetTrigger("ForwardAttackSwipe");
+            anim.SetTrigger("isForwardAttacking");
         }
 
         if (Input.GetMouseButtonDown(0) && Time.time > lastAttackTime + attackCooldown)
@@ -146,17 +143,15 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         {
             IsCharging = false;
             float heldTime = Time.time - chargeStartTime;
+            anim.SetBool("isCharging", false);
 
             if (heldTime < strongAttackHoldTime)
             {
                 IsStrongAttack = false;
-                anim.SetBool("isCharging", false);
-                anim.SetTrigger("isAttacking");
             }
             else
             {
                 IsStrongAttack = true;
-                anim.SetBool("isCharging", false);
                 anim.SetTrigger("isStrongAttacking");
             }
 
