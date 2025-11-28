@@ -50,7 +50,7 @@ public class MenuUIManager : MonoBehaviour
     }
 
 
-    public IEnumerator FadeToGame(float startAlpha, float endAlpha, string sceneName = "AP01")
+    public IEnumerator FadeToGame(float startAlpha, float endAlpha, string sceneName = "IntroScene")
     {
         fade.SetActive(true);
         float time = 0;

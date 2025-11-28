@@ -23,15 +23,15 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
-        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        dataPersistenceObjects = FindAllDataPersistenceObjects();
         sequenceManager = FindAnyObjectByType<SequenceManager>();
         LoadGame();
     }
 
     public void NewGame()
     {
-        this.gameData = new GameData();
+        gameData = new GameData();
     }
 
     public void SaveGame()
@@ -45,17 +45,23 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
-        this.gameData = dataHandler.Load();
-        if (this.gameData == null)
+        gameData = dataHandler.Load();
+        
+        if (gameData == null)
         {
             Debug.Log("No save data was found, initializing defaults...");
             NewGame();
         }
+
         foreach (IDataPersistence obj in dataPersistenceObjects)
         {
             obj.LoadData(gameData);
         }
-        sequenceManager.PositionPlayerAtSpawn();
+
+        if(sequenceManager != null)
+        {
+            sequenceManager.PositionPlayerAtSpawn();
+        }
     }
 
     private void OnApplicationQuit()

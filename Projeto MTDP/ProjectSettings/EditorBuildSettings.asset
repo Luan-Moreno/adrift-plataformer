@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: a585b3be3006c24429eef42beedfede5
   - enabled: 1
+    path: Assets/Scenes/IntroScene.unity
+    guid: 332816a4f30e8a64ca9f40b08c9984b8
+  - enabled: 1
     path: Assets/Scenes/1- A Praia/AP01.unity
     guid: c1830c72cdd4f3c4b9a75774839c1103
   - enabled: 1

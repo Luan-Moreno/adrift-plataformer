@@ -112,14 +112,12 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
 
         if (meleeAttack && Input.GetAxis("Vertical") > 0)
         {
-            Debug.Log("Ataque pra cima");
             currentAttackPoint = attackPointUp;
             anim.SetTrigger("isUpwardAttacking");
         }
 
         if (meleeAttack && Input.GetAxis("Vertical") < 0 && !playerMovement.IsGrounded)
         {
-            Debug.Log("Ataque pra baixo");
             currentAttackPoint = attackPointDown;
             anim.SetTrigger("isDownwardAttacking");
         }
@@ -127,7 +125,6 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         if ((meleeAttack && Input.GetAxis("Vertical") == 0) ||
         meleeAttack && Input.GetAxis("Vertical") < 0 && playerMovement.IsGrounded)
         {
-            Debug.Log("Ataque lateral");
             currentAttackPoint = attackPointForward;
             anim.SetTrigger("isForwardAttacking");
         }
@@ -204,7 +201,6 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     void GiveDamage(GameObject target, int damage)
     {
         EnemyCombat enemyCombat = target.GetComponent<EnemyCombat>();
-        Debug.Log("Enemy hit! - Caused " + damage + " damage!");
         if (IsStrongAttack)
         {
             enemyCombat.TakeHighDamage(damage);

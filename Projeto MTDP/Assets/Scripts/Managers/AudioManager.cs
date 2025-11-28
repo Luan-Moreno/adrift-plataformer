@@ -4,7 +4,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    private AudioSource audioSource;
+    public AudioSource audioSource;
     private AudioClip previousClip;
     private float previousVolume;
 
@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviour
         audioSource.Play();
     }
 
-    private IEnumerator FadeVolume(float start, float end, float duration)
+    public IEnumerator FadeVolume(float start, float end, float duration)
     {
         float time = 0f;
         while (time < duration)
