@@ -145,7 +145,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114253475}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -545.82526}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
   m_LocalScale: {x: 3.72, y: 3.72, z: 3.72}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1755752361545258686, guid: fd510322c57d09e43a154d76f2297b64, type: 3}
+  m_Sprite: {fileID: 147434752360468177, guid: 5b145cc73929cda4a89d02682070169d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1064,9 +1064,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.0026703
       objectReference: {fileID: 0}
+    - target: {fileID: 3993608953125101922, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 147434752360468177, guid: 5b145cc73929cda4a89d02682070169d, type: 3}
+    - target: {fileID: 4079426355109822853, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5227754011505821323, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5380065599924984944, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6040477663155117311, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1074,11 +1086,15 @@ PrefabInstance:
       objectReference: {fileID: 1698929743}
     - target: {fileID: 6130265919892085608, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6441450034078855148, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
       propertyPath: m_Name
       value: Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441450034078855148, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7363815535738132606, guid: 2fc9f8695d422284ba156f764b3d7821, type: 3}
       propertyPath: m_Pivot.x

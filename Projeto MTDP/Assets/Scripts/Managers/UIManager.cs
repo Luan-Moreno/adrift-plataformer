@@ -68,7 +68,6 @@ public class UIManager : MonoBehaviour
         //if (fade != null) fade.SetActive(false);
         if (pauseMenu != null) pauseMenu.SetActive(false);
         if (inventory != null) inventory.SetActive(false);
-        if (settings != null) { settingsState = false; settings.SetActive(false);}
 
         Pause();
     }
@@ -76,7 +75,8 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !gameOver.activeInHierarchy
-        && !inventory.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy)
+        && !inventory.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy 
+        && !settings.activeInHierarchy)
         {
             bool initialPauseState = PauseState;
             PauseState = !PauseState;
@@ -86,7 +86,8 @@ public class UIManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.I) && !gameOver.activeInHierarchy
-        && !pauseMenu.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy)
+        && !pauseMenu.activeInHierarchy && !dialogueManager.DialoguePanel.activeInHierarchy
+        && !settings.activeInHierarchy)
         {
             PauseState = !PauseState;
             inventory.SetActive(PauseState);
@@ -183,11 +184,7 @@ public class UIManager : MonoBehaviour
         gameOver.SetActive(false);
         pauseMenu.SetActive(false);
         inventory.SetActive(false);
-        if (settings != null)
-        {
-            settingsState = false;
-            settings.SetActive(false);
-        }
+        settings.SetActive(false);
     }
     
     private void OnDestroy()

@@ -24,10 +24,10 @@ public class IntroManager : MonoBehaviour
     {
         AudioManager.instance.PlayTemporaryBGM(boatSFX, sfxVolume);
 
-        yield return StartCoroutine(ShowText("O mar engole tudo que ousa cruzar suas águas..."));
-        yield return StartCoroutine(ShowText("E naquela noite, um navio lutava contra seu destino."));
+        yield return StartCoroutine(ShowText("The sea swallows everything that dares to cross its waters..."));
+        yield return StartCoroutine(ShowText("And that night, a ship was fighting against its destiny."));
         yield return new WaitForSeconds(1f);
-        yield return StartCoroutine(ShowText("Mas nem todos que afundam estão destinados a morrer."));
+        yield return StartCoroutine(ShowText("But not everyone who sinks is destined to die."));
         
         yield return AudioManager.instance.FadeVolume(AudioManager.instance.audioSource.volume, 0f, 0.5f);
 
