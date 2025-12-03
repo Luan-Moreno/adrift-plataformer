@@ -1,76 +1,87 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
     public AudioSource audioSource;
+    public AudioMixer audioMixer;
+    public AudioMixerGroup masterGroup;
+
     private AudioClip previousClip;
-    private float previousVolume;
 
     private void Awake()
+{
+    if (instance == null)
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
-            // Garante que sempre tem AudioSource
-            audioSource = GetComponent<AudioSource>();
-            if (audioSource == null)
-                audioSource = gameObject.AddComponent<AudioSource>();
-        }
-        else if (instance != this)
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
         {
-            Destroy(gameObject);
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        if (masterGroup != null)
+        {
+            audioSource.outputAudioMixerGroup = masterGroup;
         }
     }
-
-    public static void EnsureExists()
+    else
     {
-        if (instance == null)
-        {
-            GameObject go = new GameObject("AudioManager");
-            instance = go.AddComponent<AudioManager>();
-        }
+        Destroy(gameObject);
+        return;
     }
+}
 
-    public void PlayBGM(AudioClip audio, float volume, bool loop = true)
+    public void PlayBGM(AudioClip audio, bool loop = true)
     {
         audioSource.clip = audio;
-        audioSource.volume = volume;
         audioSource.loop = loop;
         audioSource.Play();
     }
 
-    public IEnumerator FadeVolume(float start, float end, float duration)
+    public void SetBGMVolume(float db)
+    {
+        audioMixer.SetFloat("MasterVolume", db);
+    }
+
+    public IEnumerator FadeMixer(string parameter, float from, float to, float duration)
     {
         float time = 0f;
         while (time < duration)
         {
             time += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(start, end, time / duration);
+            float value = Mathf.Lerp(from, to, time / duration);
+            audioMixer.SetFloat(parameter, value);
             yield return null;
         }
-        audioSource.volume = end;
+        audioMixer.SetFloat(parameter, to);
     }
 
-    public void PlayTemporaryBGM(AudioClip newClip, float volume, float fadeDuration = 0.5f)
+    public void PlayTemporaryBGM(AudioClip newClip, float fadeDuration = 0.5f)
     {
         if (newClip == null) return;
 
         previousClip = audioSource.clip;
-        previousVolume = audioSource.volume;
 
         StopAllCoroutines();
-        StartCoroutine(SwapToTemporary(newClip, volume, fadeDuration));
+        StartCoroutine(SwapToTemporary(newClip, fadeDuration));
     }
 
-    private IEnumerator SwapToTemporary(AudioClip newClip, float volume, float fadeDuration)
+    private IEnumerator SwapToTemporary(AudioClip newClip, float fadeDuration)
     {
-        yield return FadeVolume(audioSource.volume, 0f, fadeDuration);
-        PlayBGM(newClip, volume);
-        yield return FadeVolume(0f, volume, fadeDuration);
+        audioMixer.GetFloat("MasterVolume", out float current);
+
+        // fade out
+        yield return FadeMixer("MasterVolume", current, -80f, fadeDuration);
+
+        PlayBGM(newClip);
+
+        // fade in
+        yield return FadeMixer("MasterVolume", -80f, current, fadeDuration);
     }
 
     public void RestorePreviousBGM(float fadeDuration = 0.5f)
@@ -83,8 +94,14 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator SwapBackToPrevious(float fadeDuration)
     {
-        yield return FadeVolume(audioSource.volume, 0f, fadeDuration);
-        PlayBGM(previousClip, previousVolume);
-        yield return FadeVolume(0f, previousVolume, fadeDuration);
+        audioMixer.GetFloat("MasterVolume", out float current);
+
+        // fade out
+        yield return FadeMixer("MasterVolume", current, -80f, fadeDuration);
+
+        PlayBGM(previousClip);
+
+        // fade in
+        yield return FadeMixer("MasterVolume", -80f, current, fadeDuration);
     }
 }
