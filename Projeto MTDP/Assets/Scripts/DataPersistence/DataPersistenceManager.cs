@@ -75,14 +75,11 @@ public class DataPersistenceManager : MonoBehaviour
         return new List<IDataPersistence>(dataPersistenceObjects);
     }
 
-    #if UNITY_EDITOR
-    [ContextMenu("Reset Save Data")]
     public void ResetSaveData()
     {
         NewGame();
         SaveGame();
         Debug.Log("Save reset to defaults");
     }
-    #endif
 
 }
