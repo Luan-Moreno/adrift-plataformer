@@ -21,8 +21,7 @@ public class IntroManager : MonoBehaviour
 
     IEnumerator IntroSequence()
     {
-        AudioManager.instance.audioMixer.GetFloat("MasterVolume", out float current);
-        AudioManager.instance.PlayTemporaryBGM(boatSFX);
+        MusicManager.instance.PlayTemporaryBGM(boatSFX);
 
         yield return StartCoroutine(ShowText("The sea swallows everything that dares to cross its waters..."));
         yield return new WaitForSeconds(1f);
@@ -30,14 +29,13 @@ public class IntroManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         yield return StartCoroutine(ShowText("But not everyone who sinks is destined to die."));
 
-        yield return AudioManager.instance.FadeMixer("MasterVolume", sfxVolume, -80f, 1f);
+        yield return AudioManager.instance.FadeMixer("MusicVolume", sfxVolume, -80f, 1f);
 
         DataPersistenceManager.instance.ResetSaveData();
         yield return new WaitForSeconds(0.5f);
-        AudioManager.instance.audioSource.clip = null;
 
+        yield return AudioManager.instance.FadeMixer("MusicVolume", -80f, sfxVolume, 0.001f);
         SceneManager.LoadScene("AP01");
-        AudioManager.instance.SetBGMVolume(current);
     }
 
     IEnumerator ShowText(string text)

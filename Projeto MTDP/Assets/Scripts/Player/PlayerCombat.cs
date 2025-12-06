@@ -50,6 +50,9 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     public float defaultForce = 30;
     public float upwardsForce = 5;
     public float movementTime = 0.1f;
+    [Header("Sound FX")]
+    [SerializeField] private AudioClip damageSoundClip;
+    [SerializeField] private AudioClip attackSoundClip;
     private Vector2 direction;
     private bool collided;
     private bool downwardStrike;
@@ -163,6 +166,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
         if (isImmortal || IsDead || UIManager.instance.PauseState) return;
 
         currentHp -= damage;
+        SoundFXManager.instance.PlaySoundFX(damageSoundClip, transform, 0.5f);
         uiM.UpdateHearts();
         if (currentHp <= 0)
         {
@@ -273,6 +277,7 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     public void OnAttack()
     {
         hit = Physics2D.OverlapCircle(currentAttackPoint.position, radius, enemyLayer);
+        SoundFXManager.instance.PlaySoundFX(attackSoundClip, transform, 0.1f);
         if (hit != null && !UIManager.instance.PauseState)
         {
             if (hit.CompareTag("Hazard"))

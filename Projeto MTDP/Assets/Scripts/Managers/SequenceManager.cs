@@ -62,7 +62,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             uiM.fade.SetActive(true);
             yield return StartCoroutine(uiM.Fade(0, 1));
 
-            AudioManager.instance.PlayTemporaryBGM(bonfireTheme, bonfireVolume);
+            MusicManager.instance.PlayTemporaryBGM(bonfireTheme, bonfireVolume);
 
             if (playerCombat.Bonfire != null)
             {
@@ -97,7 +97,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
             uiM.PauseState = false;
             yield return new WaitForSeconds(0.5f);
             playerMovement.Speed = playerMovement.InitialSpeed;
-            AudioManager.instance.RestorePreviousBGM();
+            MusicManager.instance.RestorePreviousBGM();
 
             yield return StartCoroutine(uiM.Fade(1, 0));
             uiM.fade.SetActive(false);

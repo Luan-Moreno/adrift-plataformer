@@ -9,10 +9,9 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
     #region Variables
     public static InventoryManager instance { get; private set; }
     public GameObject InventoryMenu;
-    public GameObject player;
-    private bool isMenuActivated;
     public ItemSlot[] itemSlot;
     public ItemSlot[] weaponSlot;
+    private GameObject player;
     private List<ItemData> itemDatas;
     #endregion
 
@@ -24,6 +23,11 @@ public class InventoryManager : MonoBehaviour, IDataPersistence
         }
         instance = this;
         itemDatas = Resources.LoadAll<ScriptableObject>("Items").OfType<ItemData>().ToList();
+    }
+
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     public int AddItem(string itemName, string displayName, int quantity, Sprite itemSprite, string itemDescription)

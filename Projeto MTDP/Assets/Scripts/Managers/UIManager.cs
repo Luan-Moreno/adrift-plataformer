@@ -60,12 +60,13 @@ public class UIManager : MonoBehaviour
 
         if (settings != null)
         {
+            Debug.Log("Settings encontrado?");
             settingsState = false;
             settings.SetActive(settingsState);
         }
 
         if (gameOver != null) gameOver.SetActive(false);
-        //if (fade != null) fade.SetActive(false);
+        if (fade != null) fade.SetActive(false);
         if (pauseMenu != null) pauseMenu.SetActive(false);
         if (inventory != null) inventory.SetActive(false);
 
@@ -180,7 +181,7 @@ public class UIManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //fade.SetActive(false);
+        fade.SetActive(false);
         gameOver.SetActive(false);
         pauseMenu.SetActive(false);
         inventory.SetActive(false);

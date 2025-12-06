@@ -22,8 +22,16 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
     private Vector2 direction;
     private Vector2 dashDirection;
 
+    [Header("Sound FX")]
+    public int isFirstStep;
+    [SerializeField] private AudioClip leftStepClip;
+    [SerializeField] private AudioClip rightStepClip;
+    [SerializeField] private AudioClip jumpingSoundClip;
+    private AudioClip clipToPlay;
+
     [Header("Checks")]
     [SerializeField] private bool isMoving;
+    [SerializeField] private bool wasMoving;
     [SerializeField] private bool wallHit;
     [SerializeField] private bool isGrounded;
     [SerializeField] private bool isCoyoteGrounded;
@@ -77,6 +85,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         {
             direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             IsMoving = direction.x != 0;
+
             GroundCheck();
             Rotate();
             Run();
@@ -130,7 +139,6 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             facing = -1f;
         }
     }
-
     void Run()
     {
         if (Input.GetKey(KeyCode.LeftShift) && IsGrounded)
@@ -148,6 +156,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         if ((isCoyoteGrounded || isJumpBuffer) && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
+            SoundFXManager.instance.PlaySoundFX(jumpingSoundClip, transform, 0.2f);
             isJumpBuffer = false;
         }
 
@@ -187,6 +196,22 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             isCoyoteGrounded = true;
             canDash = true;
         }
+    }
+
+    public void StepsSound(int isFirstStep)
+    {
+        if (!isGrounded) return;
+
+        if(isFirstStep == 1)
+        {
+            clipToPlay = leftStepClip;
+        }
+        else if (isFirstStep == 0)
+        {
+            clipToPlay = rightStepClip;
+        }
+
+        SoundFXManager.instance.PlaySoundFX(clipToPlay, transform, 0.4f);
     }
 
     IEnumerator StopDashing()

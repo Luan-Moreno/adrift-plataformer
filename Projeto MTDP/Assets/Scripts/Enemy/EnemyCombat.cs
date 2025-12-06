@@ -22,6 +22,7 @@ public class EnemyCombat : MonoBehaviour
     private Collider2D hit;
     private CinemachineImpulseSource impulseSource;
     private Vector3 initialPosition;
+    [SerializeField] private AudioClip damageSoundClip;
 
     public bool IsDead { get => isDead; set => isDead = value; }
     #endregion
@@ -76,6 +77,7 @@ public class EnemyCombat : MonoBehaviour
         enemyHp -= damage;
         if (CameraManager.instance.CanShake)
         {
+            SoundFXManager.instance.PlaySoundFX(damageSoundClip, transform, 1f);
             CameraManager.instance.CameraShake(impulseSource);
         }
         if (enemyHp <= 0)
