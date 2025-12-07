@@ -33,8 +33,8 @@ Transform:
   m_GameObject: {fileID: 927268700516336164}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.12, y: -2.8, z: 0}
-  m_LocalScale: {x: 1.6718, y: 1.6718, z: 0}
+  m_LocalPosition: {x: 11.948, y: -0.7516668, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7231417047259225491}
@@ -84,9 +84,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 87cf1093dd9d0974fae8b8e8c352c733, type: 3}
+  m_Sprite: {fileID: -4368808767391742278, guid: f5db4d87ae7aa6f4fa54adf8e1255c79, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.8, y: 0.95}
@@ -156,17 +156,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.031321466, y: 0.026942551}
+  m_Offset: {x: -0.015817225, y: 0.006319642}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0666667, y: 1.0666667}
+    oldSize: {x: 1.7, y: 1.5}
     newSize: {x: 0.8, y: 0.95}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.83551514, y: 0.38672107}
+  m_Size: {x: 1.6250685, y: 1.4060705}
   m_EdgeRadius: 0
 --- !u!95 &526046562356633260
 Animator:
@@ -178,7 +178,7 @@ Animator:
   m_GameObject: {fileID: 927268700516336164}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5f6cbc07a054d4844babc1903412906a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 26baffc662b32174fa019b046397683d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927268700516336164}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b91ffbc7b0f04b4bb3a3cd2600a6e95, type: 3}
   m_Name: 
@@ -306,7 +306,7 @@ MonoBehaviour:
   damage: 1
   enemyHp: 5
   maxEnemyHp: 5
-  flashColor: {r: 0, g: 0.08852029, b: 1, a: 0}
+  flashColor: {r: 0, g: 0.08852029, b: 1, a: 1}
   isDead: 0
   damageSoundClip: {fileID: 8300000, guid: ff744c9098936194e86ebbb686b3d37b, type: 3}
 --- !u!1 &1457801967411273926
@@ -365,7 +365,7 @@ Transform:
   m_GameObject: {fileID: 3697279173365456400}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.151764, y: -1.1231846, z: 0}
+  m_LocalPosition: {x: 12.019, y: -0.761, z: 0}
   m_LocalScale: {x: 1.6718, y: 1.6718, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -438,7 +438,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.8384376, y: 0}
+  m_Offset: {x: 2.8, y: 0.2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 8931732584434664709}
   - component: {fileID: 3975152470560337420}
   m_Layer: 0
-  m_Name: Enemy_FlyingChase
+  m_Name: DespairCrow_FlyingChase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -42,7 +42,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!uiM.PauseState && !enemyCombat.IsDead)
         {
-            //isMoving = rig.linearVelocity.magnitude > 0.1f;
+            isMoving = rig.linearVelocity.magnitude > 0.1f;
         }
     }
 

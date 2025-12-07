@@ -2,12 +2,18 @@ using UnityEngine;
 
 public class GamePersistence : MonoBehaviour
 {
+    public static GamePersistence instance { get; private set; }
+
     private void Awake()
-    {
-        if (GameObject.Find("PersistentManagers") != null)
+    {  
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
-        }        
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
         LoadAndInstantiate("PersistentManagers");
         LoadAndInstantiate("PersistentCameras");

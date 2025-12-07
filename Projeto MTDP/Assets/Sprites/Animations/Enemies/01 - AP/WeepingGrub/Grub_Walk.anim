@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Enemy_Idle
+  m_Name: Grub_Walk
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,7 +21,9 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: 87cf1093dd9d0974fae8b8e8c352c733, type: 3}
+      value: {fileID: -4064705848517630846, guid: f50765a982167cc4cb351f486891dece, type: 3}
+    - time: 0.083333336
+      value: {fileID: -1319533509610344082, guid: f50765a982167cc4cb351f486891dece, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,13 +46,14 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 87cf1093dd9d0974fae8b8e8c352c733, type: 3}
+    - {fileID: -4064705848517630846, guid: f50765a982167cc4cb351f486891dece, type: 3}
+    - {fileID: -1319533509610344082, guid: f50765a982167cc4cb351f486891dece, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.083333336
+    m_StopTime: 0.16666667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

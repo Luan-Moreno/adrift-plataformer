@@ -29,6 +29,7 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     private Vector3 sceneLastSpawn;
     IEnumerable<EnemyCombat> enemyObjects;
 
+    private GameObject player;
     private PlayerCombat playerCombat;
     private PlayerMovement playerMovement;
     private PlayerAnim playerAnim;
@@ -39,12 +40,43 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
 
     void Start()
     {
+        player = GameObject.FindWithTag("Player");
         enemyObjects = FindAllEnemies();
 
         if (spawnPoint != Vector3.zero && playerCombat != null)
         {
             playerCombat.transform.position = spawnPoint;
         }
+    }
+
+    public IEnumerator Respawn()
+    {
+        if (playerCombat.IsRespawning)
+        {
+            yield break;
+        }
+
+        playerCombat.IsRespawning = true;
+        playerCombat.IsImmortal = true;
+        playerMovement.Speed = 0;
+        playerMovement.Rig.linearVelocity = Vector2.zero;
+        uiM.fade.SetActive(true);
+        yield return StartCoroutine(uiM.Fade(0, 1, 0.65f));
+        yield return new WaitForSeconds(0.1f);
+        player.transform.position = spawnPoint;
+        playerMovement.Rig.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(0.1f);
+        yield return StartCoroutine(uiM.Fade(1, 0, 0.65f));
+        uiM.fade.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        playerMovement.Speed = playerMovement.InitialSpeed;
+        playerCombat.IsRespawning = false;
+        playerCombat.IsImmortal = false;
+    }
+
+    public void RespawnPlayer()
+    {
+        StartCoroutine(Respawn());
     }
 
     #region Rest Sequence

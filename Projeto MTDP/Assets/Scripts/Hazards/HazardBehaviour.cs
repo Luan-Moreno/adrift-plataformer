@@ -59,31 +59,6 @@ public class HazardBehaviour : MonoBehaviour
         yield return new WaitForSeconds(invulnerabilityTime);
     }
 
-    IEnumerator Respawn()
-    {
-        if (playerCombat.IsRespawning)
-        {
-            yield break;
-        }
-
-        playerCombat.IsRespawning = true;
-        playerCombat.IsImmortal = true;
-        playerMovement.Speed = 0;
-        playerMovement.Rig.linearVelocity = UnityEngine.Vector2.zero;
-        uiM.fade.SetActive(true);
-        yield return StartCoroutine(uiM.Fade(0, 1, 0.65f));
-        yield return new WaitForSeconds(0.1f);
-        player.transform.position = sequenceManager.spawnPoint;
-        playerMovement.Rig.linearVelocity = UnityEngine.Vector2.zero;
-        yield return new WaitForSeconds(0.1f);
-        yield return StartCoroutine(uiM.Fade(1, 0, 0.65f));
-        uiM.fade.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        playerMovement.Speed = playerMovement.InitialSpeed;
-        playerCombat.IsRespawning = false;
-        playerCombat.IsImmortal = false;
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag("Player"))
@@ -91,7 +66,7 @@ public class HazardBehaviour : MonoBehaviour
             StartCoroutine(Hit());
             if (causesRespawn)
             {
-                StartCoroutine(Respawn());
+                StartCoroutine(sequenceManager.Respawn());
             }
         }
     }

@@ -46,7 +46,6 @@ public class EnemyCombat : MonoBehaviour
 
     private IEnumerator Attack()
     {
-        //TEMPORÁRIO
         GiveDamage();
         yield return new WaitForSeconds(0.25f);
         isAttacking = true;

@@ -60,7 +60,6 @@ public class UIManager : MonoBehaviour
 
         if (settings != null)
         {
-            Debug.Log("Settings encontrado?");
             settingsState = false;
             settings.SetActive(settingsState);
         }

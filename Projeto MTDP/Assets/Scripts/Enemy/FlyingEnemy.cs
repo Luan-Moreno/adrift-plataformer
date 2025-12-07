@@ -10,6 +10,7 @@ public class FlyingEnemy : MonoBehaviour
     public float speed = 5f;
     public float stoppingDistance = 1.5f;
     private SpriteRenderer sr;
+    private Animator anim;
 
     void Start()
     {
@@ -17,20 +18,43 @@ public class FlyingEnemy : MonoBehaviour
         facingRight = Vector3.zero;
         facingLeft = new Vector3(0f, 180f, 0f);
         sr = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
         if (startingPoint == null) startingPoint = transform;
         chase = false;
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (player == null) 
+        {
+            return;
+        }
 
         Vector3 target = chase ? player.transform.position : startingPoint.position;
         float distance = Vector2.Distance(transform.position, target);
-
-        if (distance > stoppingDistance)
+        
+        if(target == startingPoint.position)
+        {
             transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        }
 
+        else
+        {
+            if (distance > stoppingDistance)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            } 
+        }
+
+        if (distance > 0.1f)
+        {
+            anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
+        }
+            
         Flip();
     }
 
