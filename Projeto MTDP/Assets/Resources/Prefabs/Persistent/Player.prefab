@@ -343,6 +343,7 @@ MonoBehaviour:
   fallMultiplier: 1.2
   dashVelocity: 8
   dashDuration: 0.3
+  isFirstStep: 0
   leftStepClip: {fileID: 8300000, guid: e8f861c48546bdf42b83eca5bf5bfb43, type: 3}
   rightStepClip: {fileID: 8300000, guid: aa2c18671018d88468e94fca87d7a9ba, type: 3}
   jumpingSoundClip: {fileID: 8300000, guid: 691f4b16dd654be49ba787486a220488, type: 3}
@@ -385,7 +386,7 @@ MonoBehaviour:
   radius: 0.6
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 520
+    m_Bits: 4616
   attackCooldown: 0.25
   strongAttackHoldTime: 1
   currentAttackPoint: {fileID: 6151177747686082231}

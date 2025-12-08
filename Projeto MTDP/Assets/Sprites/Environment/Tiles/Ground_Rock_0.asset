@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Ground_Rock_0
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -5837682634273993079, guid: df14d1d2e08daf643b399fd657b9ca65, type: 3}
+  m_Sprite: {fileID: -5420401667484711953, guid: f404b8622eb0ced43a43d07b0367d3ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
