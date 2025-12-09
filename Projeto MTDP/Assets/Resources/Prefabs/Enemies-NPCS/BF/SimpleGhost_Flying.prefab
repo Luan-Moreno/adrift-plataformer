@@ -304,7 +304,7 @@ MonoBehaviour:
     m_Bits: 128
   isAttacking: 0
   damage: 1
-  enemyHp: 5
+  enemyHp: 3
   maxEnemyHp: 5
   flashColor: {r: 0, g: 0.08852029, b: 1, a: 1}
   isDead: 0
@@ -438,7 +438,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.38877583, y: 0}
+  m_Offset: {x: -0.9274632, y: -1.6160561}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -448,7 +448,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 9.854046, y: 3}
+  m_Size: {x: 4.640916, y: 3.352412}
   m_EdgeRadius: 0
 --- !u!114 &3142909247202031587
 MonoBehaviour:

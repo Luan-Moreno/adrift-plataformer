@@ -441,8 +441,8 @@ MonoBehaviour:
     m_Bits: 0
   isAttacking: 0
   damage: 2
-  enemyHp: 5
-  maxEnemyHp: 5
+  enemyHp: 3
+  maxEnemyHp: 3
   flashColor: {r: 0, g: 0.0940752, b: 1, a: 1}
   isDead: 0
   damageSoundClip: {fileID: 8300000, guid: ff744c9098936194e86ebbb686b3d37b, type: 3}

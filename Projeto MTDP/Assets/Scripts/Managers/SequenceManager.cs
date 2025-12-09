@@ -155,26 +155,30 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     #region OnSceneLoad/Destroy
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        player = GameObject.FindWithTag("Player");
+        playerCombat = FindAnyObjectByType<PlayerCombat>();
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
+        playerAnim = FindAnyObjectByType<PlayerAnim>();
+
         spawnPoint = sceneFirstSpawn;
         Time.timeScale = 1f;
-        playerCombat = FindAnyObjectByType<PlayerCombat>();
+        
         playerCombat.IsCharging = false;
+
         if (playerCombat.IsDead)
         {
             playerCombat.CurrentHp = playerCombat.MaxHp;
             playerCombat.IsDead = false;
             uiM.UpdateHearts();
         }
+
         playerCombat.IsRespawning = false;
         playerCombat.IsImmortal = false;
-        playerMovement = FindAnyObjectByType<PlayerMovement>();
         playerMovement.Speed = playerMovement.InitialSpeed;
-        playerAnim = FindAnyObjectByType<PlayerAnim>();
 
         anim = playerAnim.GetComponent<Animator>();
         uiM = FindAnyObjectByType<UIManager>();
         uiM.PauseState = false;
-        
 
         firstSpawnObj = GameObject.FindGameObjectWithTag("FirstSpawn");
         lastSpawnObj = GameObject.FindGameObjectWithTag("LastSpawn");

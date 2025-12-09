@@ -32,6 +32,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/2- Bosque Fantasma/BF03.unity
     guid: 1ebc01a13ed5cd946bb97c0f67d3d004
+  - enabled: 1
+    path: Assets/Scenes/3- O Farol/OF01.unity
+    guid: 7f9e81c05cae9eb45af3cd59b9eaf698
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
