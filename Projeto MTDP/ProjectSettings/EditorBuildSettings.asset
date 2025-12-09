@@ -35,6 +35,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/3- O Farol/OF01.unity
     guid: 7f9e81c05cae9eb45af3cd59b9eaf698
+  - enabled: 1
+    path: Assets/Scenes/3- O Farol/OF02.unity
+    guid: 2e206a502c4c4cb419732a557c37f4dc
+  - enabled: 1
+    path: Assets/Scenes/3- O Farol/OF03.unity
+    guid: 748827c85e5ad8448a26138137e0bfd0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

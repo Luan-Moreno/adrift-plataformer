@@ -30,6 +30,8 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     private Vector3 sceneFirstSpawn;
     private GameObject lastSpawnObj;
     private Vector3 sceneLastSpawn;
+    public static bool spawnRight = true;
+
     IEnumerable<EnemyCombat> enemyObjects;
 
     private GameObject player;
@@ -206,7 +208,22 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
 
             if (destination != null)
             {
-                playerCombat.transform.position = destination.transform.position;
+                Debug.Log("Destination encontrado");
+                Vector3 pos = destination.transform.position;
+                float offset = destination.offset;
+
+                if(spawnRight)
+                {
+                    pos.x -= offset;
+                }
+                    
+                else
+                {
+                    pos.x += offset;
+                }
+
+                playerCombat.transform.position = pos;
+                    
                 StartCoroutine(destination.WaitTeleport());
                 //Debug.Log($"Player spawnado na saída '{lastUsedPortalID}' em {destination.transform.position}");
                 lastUsedPortalID = null;
