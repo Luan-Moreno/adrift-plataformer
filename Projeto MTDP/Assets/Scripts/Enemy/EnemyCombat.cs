@@ -122,8 +122,10 @@ public class EnemyCombat : MonoBehaviour
     public void Respawn()
     {
         isDead = false;
+        isAttacking = false;
         enemyHp = maxEnemyHp;
         gameObject.transform.position = initialPosition;
+        spriteRenderer.color = normalColor;
         gameObject.SetActive(true);
     }
     

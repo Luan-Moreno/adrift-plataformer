@@ -24,7 +24,6 @@ public class DialogueTrigger : MonoBehaviour
             visualCue.SetActive(true);
             if(Input.GetKeyDown(KeyCode.E) && playerMovement.IsGrounded)
             {
-                Debug.Log("Dialogo Iniciado");
                 DialogueManager.instance.EnterDialogueMode(inkJSON, npcSprite);
             }
         }

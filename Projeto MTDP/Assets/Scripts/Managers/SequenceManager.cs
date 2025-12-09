@@ -9,8 +9,11 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
 {
     public static string lastUsedPortalID = null;
 
+    public static SequenceManager instance;
+
     private void Awake()
     {
+        instance = this;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -41,12 +44,18 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        playerCombat = FindAnyObjectByType<PlayerCombat>();
+        anim = player.GetComponent<Animator>();
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
+        uiM = FindAnyObjectByType<UIManager>();
+
         enemyObjects = FindAllEnemies();
 
         if (spawnPoint != Vector3.zero && playerCombat != null)
         {
             playerCombat.transform.position = spawnPoint;
         }
+        
     }
 
     public IEnumerator Respawn()

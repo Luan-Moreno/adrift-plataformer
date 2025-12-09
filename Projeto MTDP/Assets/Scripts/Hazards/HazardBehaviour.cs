@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Numerics;
 
 public class HazardBehaviour : MonoBehaviour
 {
@@ -17,7 +16,6 @@ public class HazardBehaviour : MonoBehaviour
     private PlayerMovement playerMovement;
     private GameObject player;
     private UIManager uiM;
-    private SequenceManager sequenceManager;
 
     void Start()
     {
@@ -26,7 +24,6 @@ public class HazardBehaviour : MonoBehaviour
         playerMovement = FindAnyObjectByType<PlayerMovement>();
         player = playerCombat.gameObject;
         uiM = FindAnyObjectByType<UIManager>();
-        sequenceManager = FindAnyObjectByType<SequenceManager>();
     }
 
     public void Damage(int amount)
@@ -66,7 +63,7 @@ public class HazardBehaviour : MonoBehaviour
             StartCoroutine(Hit());
             if (causesRespawn)
             {
-                StartCoroutine(sequenceManager.Respawn());
+                StartCoroutine(SequenceManager.instance.Respawn());
             }
         }
     }

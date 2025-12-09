@@ -19,10 +19,12 @@ public class PlayerAnim : MonoBehaviour
         {
             if (playerMovement.Speed == playerMovement.InitialSpeed)
             {
+                anim.SetBool("isRunning", false);
                 anim.SetBool("isWalking", true);
             }
             else
             {
+                anim.SetBool("isWalking", false);
                 anim.SetBool("isRunning", true);
             }
         }
