@@ -17,6 +17,14 @@ O foco é inteiramente no **fluxo de gameplay**.
 
 ---
 
+## **Como Jogar**
+
+Disponível para download ou via navegador:
+
+🔗 **[Link para jogar](https://lupedev.itch.io/adrift)**
+
+---
+
 ## **Características do Jogo**
 
 ### **Combate Rápido e Preciso**
@@ -47,12 +55,4 @@ O foco é inteiramente no **fluxo de gameplay**.
 
 > ⚠️ O jogo está em **Pré-alpha**, ou seja, representa apenas uma pequena parte do conteúdo final planejado.
 > Pode conter bugs, placeholders e ajustes temporários.
-
----
-
-## **Como Jogar**
-
-Disponível para download ou via navegador:
-
-🔗 **[Link para jogar](https://lupedev.itch.io/adrift)**
 
