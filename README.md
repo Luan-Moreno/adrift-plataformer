@@ -1,56 +1,58 @@
-# Adrift – Jogo Metroidvania 2D
 
-**Adrift** é um jogo Metroidvania 2D centrado em uma ilha misteriosa, com exploração não-linear, combate desafiador e progressão de habilidades. O projeto está em desenvolvimento ativo e atualmente se encontra em pré-alpha.
+# **Adrift – Jogo Plataformer 2D**
 
----
+**Adrift** é um jogo 2D de plataforma com foco em **combate**, **desafio** e **atmosfera**, ambientado em uma ilha desconhecida e hostil.
+O jogo está em **pré-alpha** e em desenvolvimento ativo.
 
-## Objetivo do Projeto
-Criar uma experiência de exploração imersiva, combinando:
-
-- Ambientes interconectados com segredos e áreas desbloqueáveis  
-- Combate dinâmico contra inimigos variados  
-- Sistema de habilidades e upgrades para o jogador  
-- Elementos de plataforma desafiadores e puzzles ambientais
-
-O projeto também serve como **protótipo de integração de sistemas complexos** em um Metroidvania 2D.
+> 🎨 **Todos os assets visuais (personagens, cenários, animações e interface) foram criados inteiramente por mim.**
+> Apenas os efeitos sonoros (SFX) utilizam material externo.
 
 ---
 
-## Mecânicas Principais
+## **Visão Geral**
 
-### Exploração
-- Mapa interconectado com áreas que exigem habilidades específicas  
-- Segredos e itens escondidos que incentivam a exploração  
-- Sistema de checkpoints para salvar progresso
-
-### Combate
-- Ataques corpo a corpo e à distância  
-- Inimigos com padrões diferentes de ataque  
-- Chefes com mecânicas únicas
-
-### Progressão de Habilidades
-- Desbloqueio de habilidades que permitem acessar novas áreas  
-- Sistema de upgrades para ataques e movimento (pulo duplo, dash, etc.)
-
-### Plataforma e Interação
-- Plataformas móveis e obstáculos ambientais  
-- Puzzles que exigem combinação de habilidades e raciocínio
+O jogador controla um sobrevivente que naufragou em uma ilha estranha.
+Não há história explícita: o mundo é apresentado através de **cenários**, **inimigos** e **elementos ambientais** que sugerem o que aconteceu naquele lugar.
+O foco é inteiramente no **fluxo de gameplay**.
 
 ---
 
-## Status do Projeto
-- Protótipo com movimentação e combate básico  
-- Sistema de habilidades implementado  
-- Primeira área da ilha jogável  
-- Inimigos e chefes implementados  
-- Build jogável disponível
+## **Características do Jogo**
 
-> ⚠️ Projeto em pré-alpha, ainda em desenvolvimento ativo.
+### **Combate Rápido e Preciso**
+
+* Golpes corpo a corpo leves e pesados
+* Inimigos com padrões distintos de comportamento
+* Chefes com ataques e padrões únicos
+
+### **Plataforma Desafiadora**
+
+* Obstáculos ambientais, sequências de precisão e armadilhas
+* Movimento fluido com ênfase em timing e leitura do cenário
+* Estrutura **linear**, conduzindo o jogador por áreas cada vez mais difíceis
+
+### **Atmosfera e Ambientação**
+* Efeitos visuais, iluminação e música para reforçar o clima estranho da ilha
 
 ---
 
-## Como Jogar
-O jogo pode ser baixado como executável ou jogado via navegador no link abaixo:  
+## **Estado Atual (Pré-Alpha)**
+* **Build pública pronta para testes**.
+* Sistema de combate funcional.
+* Inimigos implementados.
+* Primeira região completa e jogável.
+* Boss com mecânicas próprias.
+* Cutscenes curtas e transições de cena.
 
-[Link para jogar]()
+
+> ⚠️ O jogo está em **Pré-alpha**, ou seja, representa apenas uma pequena parte do conteúdo final planejado.
+> Pode conter bugs, placeholders e ajustes temporários.
+
+---
+
+## **Como Jogar**
+
+Disponível para download ou via navegador:
+
+🔗 **[Link para jogar](https://lupedev.itch.io/adrift)**
 
