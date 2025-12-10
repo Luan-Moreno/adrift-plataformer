@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boss: {fileID: 1342194957}
   bossMusic: {fileID: 8300000, guid: 0df7683a3216c4f4985b36ea8b215cb8, type: 3}
-  fadeDuration: 0.5
+  fadeDuration: 0.1
 --- !u!1 &763874537
 GameObject:
   m_ObjectHideFlags: 0

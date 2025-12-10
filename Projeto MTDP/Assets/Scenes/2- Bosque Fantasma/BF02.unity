@@ -956,6 +956,8 @@ MonoBehaviour:
   sceneToLoad: BF01
   portalID: BF02-1
   destinationPortalID: BF01-2
+  spawnRight: 1
+  offset: 2
 --- !u!61 &363306486
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3325,6 +3327,8 @@ MonoBehaviour:
   sceneToLoad: BF03
   portalID: BF02-2
   destinationPortalID: BF03-1
+  spawnRight: 1
+  offset: 2
 --- !u!1 &1722631492
 GameObject:
   m_ObjectHideFlags: 0
@@ -5646,7 +5650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445054167921032340, guid: cf15bb086ff37cd40becaa3f9ec979c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4861290879736063884, guid: cf15bb086ff37cd40becaa3f9ec979c3, type: 3}
       propertyPath: m_LocalPosition.x

@@ -76,7 +76,7 @@ public class EnemyCombat : MonoBehaviour
         enemyHp -= damage;
         if (CameraManager.instance.CanShake)
         {
-            SoundFXManager.instance.PlaySoundFX(damageSoundClip, transform, 1f);
+            SoundFXManager.instance.PlaySoundFX(damageSoundClip, transform, 0.7f);
             CameraManager.instance.CameraShake(impulseSource);
         }
         if (enemyHp <= 0)

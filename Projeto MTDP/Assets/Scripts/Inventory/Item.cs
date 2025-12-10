@@ -5,6 +5,7 @@ public class Item : MonoBehaviour, IDataPersistence
     [SerializeField] private string uniqueId;
     [SerializeField] private bool collected = false;
     [SerializeField] private ItemData itemData;
+    [SerializeField] private AudioClip itemPickupSoundClip;
 
     private InventoryManager inventoryManager;
 
@@ -35,6 +36,7 @@ public class Item : MonoBehaviour, IDataPersistence
             else { itemData.quantity = leftOverItems; }
 
             if (itemData.disappears) { gameObject.SetActive(false); }
+            SoundFXManager.instance.PlaySoundFX(itemPickupSoundClip, transform);
             collected = true;
         }
     }

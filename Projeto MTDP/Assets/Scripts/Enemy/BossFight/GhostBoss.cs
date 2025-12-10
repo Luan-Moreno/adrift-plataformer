@@ -91,14 +91,14 @@ public class GhostBoss : MonoBehaviour
         if (!phase2 && currentHealth <= phase2HealthThreshold)
         {
             phase2 = true;
-            SoundFXManager.instance.PlaySoundFX(phase2SoundClip, transform, 0.8f);
+            SoundFXManager.instance.PlaySoundFX(phase2SoundClip, transform, 1f);
             teleportCooldown = phase2TeleportCooldown;
         }
     }
 
     void Die()
     {
-        SoundFXManager.instance.PlaySoundFX(dyingSoundClip, transform, 1.2f);
+        SoundFXManager.instance.PlaySoundFX(dyingSoundClip, transform, 1.1f);
         if (deathEffect != null) 
         {
             CameraManager.instance.StrongCameraShake(impulseSource);

@@ -8,6 +8,7 @@ public class Door : MonoBehaviour, IDataPersistence
     private GameObject playerNearby;
     private Animator anim;
     public static List<Door> nearbyDoors = new();
+    [SerializeField] private AudioClip openingDoorSoundClip;
 
     public string UniqueId { get => uniqueId; set => uniqueId = value; }
 
@@ -30,6 +31,7 @@ public class Door : MonoBehaviour, IDataPersistence
     public void OpenDoor()
     {
         isOpen = true;
+        SoundFXManager.instance.PlaySoundFX(openingDoorSoundClip, transform);
         gameObject.SetActive(false);
         //Debug.Log($"Porta {UniqueId} aberta!");
     }

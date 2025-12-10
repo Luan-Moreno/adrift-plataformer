@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WoodsKey2
   m_EditorClassIdentifier: 
   displayName: Woods Key2
-  itemSprite: {fileID: 767973707216567960, guid: 8a70b7401649a1f4fa633837eb2116c6, type: 3}
+  itemSprite: {fileID: 964754113848021346, guid: 9ca9eba51e546f049b783e8c2422dff1, type: 3}
   itemDescription: An ancient wooden key carved with runic symbols. It seems crafted
     to unlock hidden gates deep within the forest. Only doors marked with the same
     symbol will accept this key.

@@ -399,6 +399,8 @@ MonoBehaviour:
   upwardsForce: 5
   movementTime: 0.15
   damageSoundClip: {fileID: 8300000, guid: 5c6e22246b23e684280a7291832fc146, type: 3}
+  leafSoundClip: {fileID: 8300000, guid: 69942a4076bff834bba868c1ec9f136b, type: 3}
+  healingSoundClip: {fileID: 8300000, guid: 30730e0659f3c6c4eaa48bbc9cf10d51, type: 3}
   attackSoundClip: {fileID: 8300000, guid: 41b28d870b0adfc408d73a6323afd11f, type: 3}
 --- !u!1 &1713041516238843614
 GameObject:
@@ -673,7 +675,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.8236439, y: -3.257, z: 0.17377}
-  m_LocalScale: {x: 1.7513, y: 1.7513, z: 1.7513}
+  m_LocalScale: {x: 1.7513, y: 1.7513, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3185308593451143029}

@@ -3110,7 +3110,7 @@ MonoBehaviour:
   sceneToLoad: BF02
   portalID: BF01-2
   destinationPortalID: BF02-1
-  spawnRight: 1
+  spawnRight: 0
   offset: 3
 --- !u!1 &1722631492
 GameObject:
@@ -7335,7 +7335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445054167921032340, guid: cf15bb086ff37cd40becaa3f9ec979c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4861290879736063884, guid: cf15bb086ff37cd40becaa3f9ec979c3, type: 3}
       propertyPath: m_LocalPosition.x

@@ -183,6 +183,7 @@ MonoBehaviour:
   uniqueId: bc17c2ea-1f54-4173-85c2-322f31ed74ab
   collected: 0
   itemData: {fileID: 11400000, guid: edaca146da1b8044d942a6ffa64cfa7f, type: 2}
+  itemPickupSoundClip: {fileID: 8300000, guid: d276f9ad2def58145873dc9fcefff899, type: 3}
 --- !u!95 &5317839169217896347
 Animator:
   serializedVersion: 7

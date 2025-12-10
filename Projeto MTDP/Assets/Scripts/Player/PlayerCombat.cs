@@ -52,12 +52,14 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     public float movementTime = 0.1f;
     [Header("Sound FX")]
     [SerializeField] private AudioClip damageSoundClip;
+    [SerializeField] private AudioClip leafSoundClip;
+    [SerializeField] private AudioClip healingSoundClip;
     [SerializeField] private AudioClip attackSoundClip;
     private Vector2 direction;
     private bool collided;
     private bool downwardStrike;
     private Rigidbody2D rig;
-
+    ///
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsImmortal { get => isImmortal; set => isImmortal = value; }
     public bool IsCharging { get => isCharging; set => isCharging = value; }
@@ -220,6 +222,8 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     {
         currentHp += healing;
         uiM.UpdateHearts();
+        SoundFXManager.instance.PlaySoundFX(leafSoundClip, transform, 0.2f);
+        SoundFXManager.instance.PlaySoundFX(healingSoundClip, transform, 0.2f);
         anim.SetTrigger("isHealing");
         if (currentHp > maxHp)
         {
@@ -414,5 +418,4 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
     }
 
     #endregion
-    
 }

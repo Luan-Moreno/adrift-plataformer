@@ -412,7 +412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &81317239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,6 +1193,8 @@ MonoBehaviour:
   sceneToLoad: AP04
   portalID: AP03-2
   destinationPortalID: AP04-1
+  spawnRight: 1
+  offset: 2
 --- !u!61 &280935819
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24364,7 +24366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2445054167921032340, guid: cf15bb086ff37cd40becaa3f9ec979c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4861290879736063884, guid: cf15bb086ff37cd40becaa3f9ec979c3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24934,6 +24936,8 @@ MonoBehaviour:
   sceneToLoad: 
   portalID: AP03-1
   destinationPortalID: 
+  spawnRight: 0
+  offset: 0
 --- !u!61 &2010167441
 BoxCollider2D:
   m_ObjectHideFlags: 0
