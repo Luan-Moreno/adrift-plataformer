@@ -297,6 +297,13 @@ public class PlayerCombat : MonoBehaviour, IDataPersistence
                 StartCoroutine(HitPause());
             }
 
+            if(hit.CompareTag("Boss"))
+            {
+                playerDamage = IsStrongAttack ? 2 : 1;
+                GiveDamage(hit.gameObject, playerDamage);
+                StartCoroutine(HitPause());
+            }
+
             BreakableWall wall = hit.GetComponent<BreakableWall>();
             if (wall != null)
             {

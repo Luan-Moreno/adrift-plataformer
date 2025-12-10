@@ -19,6 +19,7 @@ TagManager:
   - LastSpawn
   - Persistent
   - NPC
+  - Boss
   layers:
   - Default
   - TransparentFX

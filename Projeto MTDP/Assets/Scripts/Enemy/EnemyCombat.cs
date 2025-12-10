@@ -10,7 +10,7 @@ public class EnemyCombat : MonoBehaviour
     public LayerMask layer;
     [SerializeField] protected bool isAttacking;
     [SerializeField] private int damage;
-    [SerializeField] private int enemyHp;
+    [SerializeField] public int enemyHp;
     [SerializeField] private int maxEnemyHp;
     private SpriteRenderer spriteRenderer;
     private Color normalColor;

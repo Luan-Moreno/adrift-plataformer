@@ -3,51 +3,74 @@ using UnityEngine;
 
 public class GhostBoss : MonoBehaviour
 {
-    [Header("Movement")]
-    public float floatAmplitude = 0.5f;
-    public float floatFrequency = 1f;
-    public float teleportDistance = 5f;
-    public float teleportCooldown = 2f;
+    [Header("Life")]
+    [SerializeField] private float currentHealth;
+    public float maxHealth = 100f;
 
+    [Header("Movement")]
+    [SerializeField] private bool canTeleport = true;
+    public float teleportCooldown = 2f;
+    
     [Header("Attack")]
     public GameObject knifePrefab;
     public Transform attackPoint;
     public float attackCooldown = 1.5f;
 
+
     [Header("Second Phase")]
+    [SerializeField] private bool phase2 = false;
     public float phase2HealthThreshold = 50f;
     public float phase2TeleportCooldown = 1f;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioClip teleportSoundClip;
+    [SerializeField] private AudioClip phase2SoundClip;
+    [SerializeField] private AudioClip dyingSoundClip;
 
     [Header("Particles")]
     public ParticleSystem teleportEffect;
     public ParticleSystem deathEffect;
+    public Transform[] teleportPositions;
 
-    [Header("Life")]
-    public float maxHealth = 100f;
-    private float currentHealth;
-
-    private Vector3 initialPos;
-    private Transform player;
-    private bool canTeleport = true;
+    private EnemyCombat enemyCombat;
     private bool canAttack = true;
-    private bool phase2 = false;
+    private Transform player;
+
 
     void Start()
     {
-        initialPos = transform.position;
         currentHealth = maxHealth;
         player = GameObject.FindWithTag("Player").transform;
+        canTeleport = true;
+        enemyCombat = GetComponent<EnemyCombat>();
+        currentHealth = enemyCombat.enemyHp;
     }
 
     void Update()
     {
-        FloatMovement();
-        CheckPhase2();
-    }
+        
+        currentHealth = enemyCombat.enemyHp;
+        if(enemyCombat.enemyHp == 1)
+        {
+            currentHealth = 0;
+        }
 
-    void FloatMovement()
-    {
-        transform.position = initialPos + Vector3.up * Mathf.Sin(Time.time * floatFrequency) * floatAmplitude;
+        if (canTeleport) 
+        {
+            StartCoroutine(Teleport());
+        }
+
+        if (canAttack) 
+        {
+            StartCoroutine(Attack());
+        }
+
+        CheckPhase2();
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     void CheckPhase2()
@@ -55,39 +78,47 @@ public class GhostBoss : MonoBehaviour
         if (!phase2 && currentHealth <= phase2HealthThreshold)
         {
             phase2 = true;
+            SoundFXManager.instance.PlaySoundFX(phase2SoundClip, transform, 0.8f);
             teleportCooldown = phase2TeleportCooldown;
-            // Particulas, Cor...
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            Die();
         }
     }
 
     void Die()
     {
-        if (deathEffect != null) Instantiate(deathEffect, transform.position, Quaternion.identity);
-        // SFXManager (Grito)
+        SoundFXManager.instance.PlaySoundFX(dyingSoundClip, transform, 1.2f);
+        if (deathEffect != null) 
+        {
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
+        }
         Destroy(gameObject);
-        // Cutscene Final (Pré-Alpha)
+        // SequenceManager.instance.ENDINGSEQUENCE()
     }
 
     IEnumerator Teleport()
     {
         canTeleport = false;
-        if (teleportEffect != null) Instantiate(teleportEffect, transform.position, Quaternion.identity);
 
-        Vector3 dir = (player.position - transform.position).normalized;
-        Vector3 newPos = player.position - dir * teleportDistance;
+        if (teleportEffect != null)
+        {
+            Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        }
+            
+        int index = Random.Range(0, teleportPositions.Length);
 
-        transform.position = newPos;
+        while(transform.position == teleportPositions[index].position)
+        {
+            index = Random.Range(0, teleportPositions.Length);
+        }
 
-        if (teleportEffect != null) Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        transform.position = teleportPositions[index].position;
+
+        SoundFXManager.instance.PlaySoundFX(teleportSoundClip, transform, 0.2f);
+
+        if (teleportEffect != null)
+        {
+            Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        }
+        
         yield return new WaitForSeconds(teleportCooldown);
         canTeleport = true;
     }
@@ -105,11 +136,5 @@ public class GhostBoss : MonoBehaviour
 
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
-    }
-
-    void FixedUpdate()
-    {
-        if (canTeleport) StartCoroutine(Teleport());
-        if (canAttack) StartCoroutine(Attack());
     }
 }
