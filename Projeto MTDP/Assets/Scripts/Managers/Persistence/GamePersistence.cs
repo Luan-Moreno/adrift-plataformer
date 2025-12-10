@@ -35,7 +35,7 @@ public class GamePersistence : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name == "MainMenu")
+        if(scene.name == "MainMenu" || scene.name == "EndingPreAlpha")
         {
             UnloadPersistent();
             persistentLoaded = false;

@@ -235,6 +235,14 @@ public class SequenceManager : MonoBehaviour, IDataPersistence
         playerCombat.transform.position = finalPosition;
         //Debug.Log($"Player posicionado em {finalPosition}");
     }
+
+    public IEnumerator Ending()
+    {
+        yield return new WaitForSeconds(0.5f);
+        UIManager.instance.StartCoroutine(UIManager.instance.Fade(1, 0, 0.65f));
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("EndingPreAlpha");
+    }
     #endregion
 
     #region Save/Load

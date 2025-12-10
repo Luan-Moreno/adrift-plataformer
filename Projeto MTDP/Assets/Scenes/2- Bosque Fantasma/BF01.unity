@@ -651,6 +651,8 @@ MonoBehaviour:
   sceneToLoad: AP04
   portalID: BF01-1
   destinationPortalID: AP04-2
+  spawnRight: 1
+  offset: 2
 --- !u!61 &363306486
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3108,6 +3110,8 @@ MonoBehaviour:
   sceneToLoad: BF02
   portalID: BF01-2
   destinationPortalID: BF02-1
+  spawnRight: 1
+  offset: 3
 --- !u!1 &1722631492
 GameObject:
   m_ObjectHideFlags: 0
